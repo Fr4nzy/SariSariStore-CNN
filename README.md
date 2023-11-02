@@ -1,5 +1,4 @@
-# SariSariStore-CNN
-Android-based POS System with Image Classification (CNN) and Predictive Analysis (ARIMA)
+# CNN Model
 
 Start by using the Data Collection.ipynb, this source code collects the datasets for the Model. 
 
