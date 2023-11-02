@@ -1,2 +1,3 @@
-# SariSariStore-CNN
-Android-based POS System with Image Classification (CNN) and Predictive Analysis (ARIMA)
+# Android - Point of Sale
+
+The Main Application for the System
