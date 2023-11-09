@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "565352183943",
+    "project_id": "sarisaristorepos",
+    "storage_bucket": "sarisaristorepos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:565352183943:android:16aeb854dd97e6ffa9e022",
+        "android_client_info": {
+          "package_name": "org.lu.sarisaristorepos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZyce3exHdyoTz8B5tS1oMdAOuPnH7Kuw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
