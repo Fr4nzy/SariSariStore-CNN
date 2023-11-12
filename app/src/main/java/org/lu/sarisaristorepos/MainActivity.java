@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
@@ -20,19 +21,18 @@ public class MainActivity extends AppCompatActivity {
         logout = findViewById(R.id.logoutBtn);
 
         pos.setOnClickListener(v -> PointOfSale());
-        product.setOnClickListener(v -> Product());
+        product.setOnClickListener(view -> ManageProducts());
         logout.setOnClickListener(v -> finish());
 
-    }
-
-    private void Product() {
-        Intent intent = new Intent(this, ProductsActivity.class);
-        startActivity(intent);
     }
 
     private void PointOfSale() {
         Intent intent = new Intent(this, PointOfSaleActivity.class);
         startActivity(intent);
 
+    }
+    private void ManageProducts(){
+        Intent intent = new Intent(this, ManageProducts.class);
+        startActivity(intent);
     }
 }

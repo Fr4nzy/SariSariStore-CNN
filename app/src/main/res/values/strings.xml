@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">SariSariStorePOS</string>
+    <string-array name="categories">
+        <item>Canned Goods</item>
+        <item>Condiments</item>
+        <item>Powdered Beverages</item>
+        <item>Instant Noodles</item>
+        <item>Others</item>
+    </string-array>
 </resources>

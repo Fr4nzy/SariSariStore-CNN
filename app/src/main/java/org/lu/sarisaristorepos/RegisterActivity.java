@@ -20,7 +20,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText editRegEmail, editRegPassword, editRegConfirmPassword;
     Button regBtn, backBtn;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +46,6 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
             } else if (password.length() < 8) {
                 Toast.makeText(this, "Password must be at least 8 characters long", Toast.LENGTH_SHORT).show();
-            } else if (!isPasswordComplex(password)) {
-                Toast.makeText(this, "Password must contain at least one uppercase, lowercase, digit, and a special character", Toast.LENGTH_LONG).show();
             } else {
                 auth.createUserWithEmailAndPassword(user, password)
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -69,12 +66,5 @@ public class RegisterActivity extends AppCompatActivity {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
         });
-    }
-
-    // Function to check if the password meets complexity requirements
-    private boolean isPasswordComplex(String password) {
-        // Define the complexity requirements
-        String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&+=]).+$";
-        return password.matches(regex);
     }
 }
