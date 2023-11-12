@@ -11,13 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import java.util.List;
+import android.widget.CompoundButton;
+import android.widget.CheckBox;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private List<Product> productList;
+    private ProductSelectionListener productSelectionListener;
 
-    public ProductAdapter(List<Product> productList) {
+    public ProductAdapter(List<Product> productList, ProductSelectionListener listener) {
         this.productList = productList;
+        this.productSelectionListener = listener;
     }
 
     @NonNull
@@ -35,12 +39,22 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.productName.setText(product.getName());
         holder.productPrice.setText(product.getPrice());
         holder.productStocks.setText(product.getStocks());
+        holder.productCheckBox.setChecked(product.isSelected());
 
         // Load the product image using Glide
         Glide.with(holder.productImage.getContext())
                 .load(product.getImageURL())
                 .apply(new RequestOptions().centerCrop())
                 .into(holder.productImage);
+
+        holder.productCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                product.setSelected(isChecked);
+                // Notify the activity that a product's selection has changed
+                productSelectionListener.onProductSelectionChanged();
+            }
+        });
     }
 
     @Override
@@ -53,6 +67,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         TextView productName;
         TextView productPrice;
         TextView productStocks;
+        CheckBox productCheckBox;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +75,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
             productStocks = itemView.findViewById(R.id.productStocks);
+            productCheckBox = itemView.findViewById(R.id.productCheckBox);
         }
+    }
+
+    // Define an interface to handle product selection changes
+    public interface ProductSelectionListener {
+        void onProductSelectionChanged();
     }
 }

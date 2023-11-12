@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">SariSariStorePOS</string>
+    <string name="app_name">Point of Sale</string>
     <string-array name="categories">
         <item>Canned Goods</item>
         <item>Condiments</item>
