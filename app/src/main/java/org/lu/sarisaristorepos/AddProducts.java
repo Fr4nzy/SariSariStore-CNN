@@ -12,8 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -30,9 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class ManageProducts extends AppCompatActivity {
+public class AddProducts extends AppCompatActivity {
     private EditText productNameEditText, productPriceEditText;
-    private Button submitButton, selectImageButton;
+    private Button submitButton, selectImageButton, deleteButton;
     private Spinner categorySpinner;
     private ImageView previewImageView;
 
@@ -44,10 +44,12 @@ public class ManageProducts extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
+    private ActivityResultLauncher<Intent> imagePickerLauncher; // New ActivityResultLauncher
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_products);
+        setContentView(R.layout.activity_add_products);
 
         productNameEditText = findViewById(R.id.productName);
         productPriceEditText = findViewById(R.id.productPrice);
@@ -68,10 +70,19 @@ public class ManageProducts extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
+        // Initialize the image picker launcher
+        imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        selectedImageUri = result.getData().getData();
+                        displaySelectedImage();
+                    }
+                });
+
         selectImageButton.setOnClickListener(v -> {
             // Start an image picker intent
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            startActivityForResult(intent, 1);
+            imagePickerLauncher.launch(intent); // Use the image picker launcher
         });
 
         submitButton.setOnClickListener(v -> {
@@ -126,24 +137,17 @@ public class ManageProducts extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
-            // Get the selected image's URI
-            selectedImageUri = data.getData();
-
-            // Display the selected image in the ImageView
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
-                Glide.with(this)
-                        .load(selectedImageUri)
-                        .apply(new RequestOptions().centerCrop())
-                        .into(previewImageView);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    // Helper method to display the selected image
+    private void displaySelectedImage() {
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
+            Glide.with(this)
+                    .load(selectedImageUri)
+                    .apply(new RequestOptions().centerCrop())
+                    .into(previewImageView);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 }

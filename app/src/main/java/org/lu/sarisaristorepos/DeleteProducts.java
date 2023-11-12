@@ -1,42 +1,44 @@
 package org.lu.sarisaristorepos;
 
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.WriteBatch;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrowseProducts extends AppCompatActivity implements ProductAdapter.ProductSelectionListener {
+public class DeleteProducts extends AppCompatActivity implements ProductAdapter.ProductSelectionListener {
 
-    private RecyclerView recyclerView;
     private TextView cartIndicatorTextView;
-    private EditText searchEditText;
-    private Button searchButton;
+    private RecyclerView recyclerView;
+    private Button deleteButton;
     private ProductAdapter productAdapter;
     private List<Product> productList;
     private FirebaseFirestore db;
 
-    private ArrayList<String> selectedItems; // Store selected items
+    private ArrayList<String> selectedItems; // Store selected items for deletion
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_browse_products);
+        setContentView(R.layout.activity_delete_products);
 
         recyclerView = findViewById(R.id.recyclerView);
+        deleteButton = findViewById(R.id.deleteButton);
         cartIndicatorTextView = findViewById(R.id.cartIndicator);
-        searchEditText = findViewById(R.id.searchEditText);
-        searchButton = findViewById(R.id.searchButton);
+
+        // Make cartIndicator non-clickable
+        cartIndicatorTextView.setClickable(false);
+
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
         productList = new ArrayList<>();
@@ -67,27 +69,69 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
             }
         });
 
-        cartIndicatorTextView.setOnClickListener(v -> {
-            // Create an intent to open CartActivity
-            Intent intent = new Intent(BrowseProducts.this, CartActivity.class);
-
-            // Pass the selected items and their total cost as extras
-            double totalCost = calculateTotalCost(selectedItems);
-
-            intent.putStringArrayListExtra("selectedItems", selectedItems);
-            intent.putExtra("totalCost", totalCost);
-
-            startActivity(intent);
-        });
-
-        // Add a click listener to the search button
-        searchButton.setOnClickListener(v -> searchProducts());
-
+        // Add a click listener to the "Delete" button
+        deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
     }
 
     @Override
     public void onProductSelectionChanged() {
+        // Handle product selection changes if needed
         updateCartIndicator();
+    }
+
+    // Show a confirmation dialog before deleting selected items
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Delete Confirmation");
+        builder.setMessage("Are you sure you want to delete the selected items?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // User confirmed deletion, call deleteSelectedProducts()
+                deleteSelectedProducts();
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // User canceled, do nothing
+            }
+        });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void deleteSelectedProducts() {
+        if (!selectedItems.isEmpty()) {
+            // Create a batch to delete selected products in a single transaction
+            WriteBatch batch = db.batch();
+
+            for (String selectedItem : selectedItems) {
+                // Split the selected item string to get the product ID
+                String[] parts = selectedItem.split(" - ");
+                if (parts.length == 2) {
+                    String productName = parts[0].trim();
+                    String productPrice = parts[1].trim();
+
+                    // Find the product with matching name and price and delete it
+                    for (Product product : productList) {
+                        if (product.getName().equals(productName) && product.getPrice().equals(productPrice)) {
+                            // Delete the product from Firestore
+                            db.collection("products").document(product.getId()).delete();
+                            // Remove the product from the local list
+                            productList.remove(product);
+                            break; // Stop searching after deletion
+                        }
+                    }
+                }
+            }
+
+            productAdapter.notifyDataSetChanged(); // Update the UI
+
+            // Clear the selected items list
+            selectedItems.clear();
+        }
     }
 
     public void updateCartIndicator() {
@@ -119,29 +163,6 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
                 totalCost += price;
             }
         }
-
         return totalCost;
-    }
-
-    private void searchProducts() {
-        String query = searchEditText.getText().toString().trim().toLowerCase();
-
-        if (!query.isEmpty()) {
-            // Filter the product list based on the search query
-            List<Product> filteredList = new ArrayList<>();
-            for (Product product : productList) {
-                if (product.getName().toLowerCase().contains(query)) {
-                    filteredList.add(product);
-                }
-            }
-
-            // Update the RecyclerView to display the filtered list
-            productAdapter.setProductList(filteredList);
-            productAdapter.notifyDataSetChanged();
-        } else {
-            // If the query is empty, display the original product list
-            productAdapter.setProductList(productList);
-            productAdapter.notifyDataSetChanged();
-        }
     }
 }

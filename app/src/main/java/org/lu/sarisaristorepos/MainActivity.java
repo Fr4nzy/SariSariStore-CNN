@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button pos, product, logout;
+    Button pos, productInsertDeleteReview, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,12 +17,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         pos = findViewById(R.id.posBtn);
-        product = findViewById(R.id.productsBtn);
+        productInsertDeleteReview = findViewById(R.id.productsBtn);
 
         logout = findViewById(R.id.logoutBtn);
 
         pos.setOnClickListener(v -> PointOfSale());
-        product.setOnClickListener(view -> ManageProducts());
+        productInsertDeleteReview.setOnClickListener(view -> InsertDeleteReview());
 
         logout.setOnClickListener(v -> finish());
 
@@ -33,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
 
     }
-    private void ManageProducts(){
-        Intent intent = new Intent(this, ManageProducts.class);
+    private void InsertDeleteReview(){
+        Intent intent = new Intent(this, InsertDeleteReview.class);
         startActivity(intent);
     }
 
