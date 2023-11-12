@@ -17,6 +17,9 @@
         android:theme="@style/Theme.SariSariStorePOS"
         tools:targetApi="31">
         <activity
+            android:name=".BrowseProducts"
+            android:exported="false" />
+        <activity
             android:name=".ManageProducts"
             android:exported="false" />
         <activity

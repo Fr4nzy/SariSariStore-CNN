@@ -49,16 +49,28 @@
         app:layout_constraintVertical_bias="0.045" />
 
     <Button
-        android:id="@+id/logoutBtn"
+        android:id="@+id/browseProducts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Log-out"
-        android:textSize="15dp"
+        android:text="Browse Products"
+        android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.898"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productsBtn"
+        app:layout_constraintVertical_bias="0.052" />
+
+    <Button
+        android:id="@+id/logoutBtn"
+        android:layout_width="130dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="16dp"
+        android:text="Log-Out"
+        android:textSize="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.888"
         app:layout_constraintStart_toEndOf="@+id/Label"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023" />
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

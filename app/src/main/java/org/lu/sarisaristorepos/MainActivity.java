@@ -9,7 +9,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button pos, product, logout;
+    Button pos, product, browse, logout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,10 +18,12 @@ public class MainActivity extends AppCompatActivity {
 
         pos = findViewById(R.id.posBtn);
         product = findViewById(R.id.productsBtn);
+        browse = findViewById(R.id.browseProducts);
         logout = findViewById(R.id.logoutBtn);
 
         pos.setOnClickListener(v -> PointOfSale());
         product.setOnClickListener(view -> ManageProducts());
+        browse.setOnClickListener(view -> BrowseProducts());
         logout.setOnClickListener(v -> finish());
 
     }
@@ -33,6 +35,11 @@ public class MainActivity extends AppCompatActivity {
     }
     private void ManageProducts(){
         Intent intent = new Intent(this, ManageProducts.class);
+        startActivity(intent);
+    }
+
+    private void BrowseProducts(){
+        Intent intent = new Intent(this, BrowseProducts.class);
         startActivity(intent);
     }
 }
