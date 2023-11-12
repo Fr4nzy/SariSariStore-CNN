@@ -83,4 +83,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     public interface ProductSelectionListener {
         void onProductSelectionChanged();
     }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
+        notifyDataSetChanged();
+    }
+
 }

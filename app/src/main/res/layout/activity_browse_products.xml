@@ -1,23 +1,55 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".BrowseProducts">
 
+
     <TextView
         android:id="@+id/cartIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:text="Cart: 0"
         android:textSize="20dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/searchEditText"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="16dp"
+        android:hint="Search products"
+        android:inputType="text"
+        app:layout_constraintStart_toEndOf="@+id/cartIndicator"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/searchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:text="Search"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/searchEditText"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@id/cartIndicator"
-        android:padding="8dp" />
-</RelativeLayout>
+        android:layout_marginTop="40dp"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchEditText" />
+</androidx.constraintlayout.widget.ConstraintLayout>

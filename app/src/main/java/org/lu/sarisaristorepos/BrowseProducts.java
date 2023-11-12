@@ -2,6 +2,8 @@ package org.lu.sarisaristorepos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -18,6 +20,8 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
 
     private RecyclerView recyclerView;
     private TextView cartIndicatorTextView;
+    private EditText searchEditText;
+    private Button searchButton;
     private ProductAdapter productAdapter;
     private List<Product> productList;
     private FirebaseFirestore db;
@@ -31,6 +35,8 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
 
         recyclerView = findViewById(R.id.recyclerView);
         cartIndicatorTextView = findViewById(R.id.cartIndicator);
+        searchEditText = findViewById(R.id.searchEditText);
+        searchButton = findViewById(R.id.searchButton);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
         productList = new ArrayList<>();
@@ -71,6 +77,10 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
 
             startActivity(intent);
         });
+
+        // Add a click listener to the search button
+        searchButton.setOnClickListener(v -> searchProducts());
+
     }
 
     @Override
@@ -96,8 +106,6 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
         cartIndicatorTextView.setText("Cart: " + selectedProductCount);
     }
 
-
-
     private double calculateTotalCost(ArrayList<String> selectedItems) {
         double totalCost = 0.0;
 
@@ -111,5 +119,27 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
         }
 
         return totalCost;
+    }
+
+    private void searchProducts() {
+        String query = searchEditText.getText().toString().trim().toLowerCase();
+
+        if (!query.isEmpty()) {
+            // Filter the product list based on the search query
+            List<Product> filteredList = new ArrayList<>();
+            for (Product product : productList) {
+                if (product.getName().toLowerCase().contains(query)) {
+                    filteredList.add(product);
+                }
+            }
+
+            // Update the RecyclerView to display the filtered list
+            productAdapter.setProductList(filteredList);
+            productAdapter.notifyDataSetChanged();
+        } else {
+            // If the query is empty, display the original product list
+            productAdapter.setProductList(productList);
+            productAdapter.notifyDataSetChanged();
+        }
     }
 }
