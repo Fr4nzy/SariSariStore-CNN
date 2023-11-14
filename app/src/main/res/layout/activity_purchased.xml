@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:layout_marginTop="40dp"
-        android:text="Purchased Items:"
+        android:text="To be purchased items:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/totalCostPurchased" />
 

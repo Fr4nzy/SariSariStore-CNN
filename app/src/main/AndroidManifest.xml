@@ -17,6 +17,9 @@
         android:theme="@style/Theme.SariSariStorePOS"
         tools:targetApi="31">
         <activity
+            android:name=".CashAmountActivity"
+            android:exported="false" />
+        <activity
             android:name=".DeleteProducts"
             android:exported="false" />
         <activity
