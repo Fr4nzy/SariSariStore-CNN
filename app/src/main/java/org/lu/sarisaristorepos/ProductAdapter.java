@@ -1,6 +1,7 @@
 package org.lu.sarisaristorepos;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,6 +54,16 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 product.setSelected(isChecked);
                 // Notify the activity that a product's selection has changed
                 productSelectionListener.onProductSelectionChanged();
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Start PlaceOrderActivity when the item is clicked
+                Context context = holder.itemView.getContext();
+                Intent intent = new Intent(context, PlaceOrderActivity.class);
+                context.startActivity(intent);
             }
         });
     }
