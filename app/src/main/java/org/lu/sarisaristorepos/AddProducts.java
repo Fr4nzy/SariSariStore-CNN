@@ -44,7 +44,7 @@ public class AddProducts extends AppCompatActivity {
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
-    private ActivityResultLauncher<Intent> imagePickerLauncher; // New ActivityResultLauncher
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
