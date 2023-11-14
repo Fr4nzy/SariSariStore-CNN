@@ -17,7 +17,7 @@ import android.widget.CheckBox;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private List<Product> productList;
-    private final ProductSelectionListener productSelectionListener;
+    private ProductSelectionListener productSelectionListener;
 
     public ProductAdapter(List<Product> productList, ProductSelectionListener listener) {
         this.productList = productList;
