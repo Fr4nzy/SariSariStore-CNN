@@ -32,7 +32,6 @@ import java.util.UUID;
 
 public class AddProducts extends AppCompatActivity {
     private EditText productNameEditText, productPriceEditText, productQuantityEditText;
-    private Button submitButton, selectImageButton;
     private Spinner categorySpinner;
     private ImageView previewImageView;
 
@@ -40,8 +39,6 @@ public class AddProducts extends AppCompatActivity {
     private FirebaseAuth auth;
     private Uri selectedImageUri = null;
 
-    // Firebase Storage
-    private FirebaseStorage storage;
     private StorageReference storageReference;
 
     private ActivityResultLauncher<Intent> imagePickerLauncher;
@@ -54,13 +51,14 @@ public class AddProducts extends AppCompatActivity {
         productNameEditText = findViewById(R.id.productName);
         productPriceEditText = findViewById(R.id.productPrice);
         productQuantityEditText = findViewById(R.id.productQuantity);
-        submitButton = findViewById(R.id.btnInsert);
+        Button submitButton = findViewById(R.id.btnInsert);
         categorySpinner = findViewById(R.id.categorySelect);
         previewImageView = findViewById(R.id.previewImg);
-        selectImageButton = findViewById(R.id.btnImgSelect);
+        Button selectImageButton = findViewById(R.id.btnImgSelect);
 
         // Initialize Firebase Storage
-        storage = FirebaseStorage.getInstance();
+        // Firebase Storage
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
         // Initialize the spinner with the category options

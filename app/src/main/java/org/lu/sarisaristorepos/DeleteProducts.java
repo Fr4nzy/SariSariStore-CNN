@@ -1,6 +1,5 @@
 package org.lu.sarisaristorepos;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -22,8 +21,6 @@ import java.util.List;
 public class DeleteProducts extends AppCompatActivity implements ProductAdapter.ProductSelectionListener {
 
     private TextView cartIndicatorTextView;
-    private RecyclerView recyclerView;
-    private Button deleteButton;
     private ProductAdapter productAdapter;
     private List<Product> productList;
     private FirebaseFirestore db;
@@ -35,8 +32,8 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_delete_products);
 
-        recyclerView = findViewById(R.id.recyclerView);
-        deleteButton = findViewById(R.id.deleteButton);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
+        Button deleteButton = findViewById(R.id.deleteButton);
         cartIndicatorTextView = findViewById(R.id.cartIndicator);
 
         // Make cartIndicator non-clickable
@@ -88,18 +85,12 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Delete Confirmation");
         builder.setMessage("Are you sure you want to delete the selected items?");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // User confirmed deletion, call deleteSelectedProducts()
-                deleteSelectedProducts();
-            }
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            // User confirmed deletion, call deleteSelectedProducts()
+            deleteSelectedProducts();
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // User canceled, do nothing
-            }
+        builder.setNegativeButton("No", (dialog, which) -> {
+            // User canceled, do nothing
         });
 
         AlertDialog dialog = builder.create();
@@ -183,17 +174,4 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         }
     }
 
-    private double calculateTotalCost(ArrayList<String> selectedItems) {
-        double totalCost = 0.0;
-
-        for (String selectedItem : selectedItems) {
-            // Parse the price from the selected item string and add to the total cost
-            String[] parts = selectedItem.split(" - ");
-            if (parts.length == 2) {
-                double price = Double.parseDouble(parts[1]);
-                totalCost += price;
-            }
-        }
-        return totalCost;
-    }
 }
