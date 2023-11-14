@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".AddProducts">
 
+    <EditText
+        android:id="@+id/productQuantity"
+        android:layout_width="240dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Item Quantity"
+        android:inputType="numberSigned"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categorySelect" />
+
     <TextView
         android:id="@+id/LabelManageActivity"
         android:layout_width="wrap_content"
@@ -41,28 +53,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productName" />
 
-    <Button
-        android:id="@+id/btnInsert"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="52dp"
-        android:text="Submit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previewImg" />
-
-    <Button
-        android:id="@+id/btnImgSelect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="176dp"
-        android:text="Select Image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/previewImg"
-        app:layout_constraintTop_toBottomOf="@+id/categorySelect" />
-
     <Spinner
         android:id="@+id/categorySelect"
         android:layout_width="240dp"
@@ -77,9 +67,31 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categorySelect"
+        app:layout_constraintTop_toBottomOf="@+id/productQuantity"
         app:srcCompat="@drawable/baseline_image_24" />
+
+    <Button
+        android:id="@+id/btnImgSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="192dp"
+        android:text="Select Image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/previewImg"
+        app:layout_constraintTop_toBottomOf="@+id/productQuantity" />
+
+    <Button
+        android:id="@+id/btnInsert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="88dp"
+        android:layout_marginTop="48dp"
+        android:text="Submit"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/previewImg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

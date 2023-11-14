@@ -2,6 +2,7 @@ package org.lu.sarisaristorepos;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
@@ -12,6 +13,8 @@ import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -114,13 +117,18 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
                     String productName = parts[0].trim();
                     String productPrice = parts[1].trim();
 
-                    // Find the product with matching name and price and delete it
+                    // Find the product with matching name and price
                     for (Product product : productList) {
                         if (product.getName().equals(productName) && product.getPrice().equals(productPrice)) {
                             // Delete the product from Firestore
                             db.collection("products").document(product.getId()).delete();
+
                             // Remove the product from the local list
                             productList.remove(product);
+
+                            // Delete the image from Firebase Storage
+                            deleteImageFromStorage(product.getImageURL());
+
                             break; // Stop searching after deletion
                         }
                     }
@@ -131,11 +139,28 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
 
             // Clear the selected items list
             selectedItems.clear();
+
+            // Update the cart indicator after the deletion process is complete
+            updateCartIndicator();
         }
     }
 
+    // Function to delete the image from Firebase Storage
+    private void deleteImageFromStorage(String imageURL) {
+        // Get a reference to the image in Firebase Storage
+        StorageReference imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imageURL);
+
+        // Delete the image
+        imageRef.delete().addOnSuccessListener(aVoid -> {
+            // Image deleted successfully
+        }).addOnFailureListener(exception -> {
+            // Handle any errors that may occur
+            // For example, log the error
+            Log.e("DeleteProducts", "Error deleting image: " + exception.getMessage());
+        });
+    }
+
     public void updateCartIndicator() {
-        selectedItems.clear(); // Clear the list of selected items
         double totalCost = 0.0;
 
         int selectedProductCount = 0; // Track the count of selected products
@@ -150,6 +175,11 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
 
         // Update the cart indicator text with the count of selected products
         cartIndicatorTextView.setText("Cart: " + selectedProductCount);
+
+        // Check if the deletion process is complete and update the cart indicator
+        if (selectedProductCount == 0 && selectedItems.isEmpty()) {
+            cartIndicatorTextView.setText("Cart: " + selectedProductCount);
+        }
     }
 
     private double calculateTotalCost(ArrayList<String> selectedItems) {
