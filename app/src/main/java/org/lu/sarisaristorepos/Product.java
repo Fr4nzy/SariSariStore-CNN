@@ -1,11 +1,11 @@
 package org.lu.sarisaristorepos;
 
 public class Product {
-    private String id; // Firestore document ID
-    private String name;
-    private String price;
-    private String imageURL;
-    private String stocks;
+    private final String id; // Firestore document ID
+    private final String name;
+    private final String price;
+    private final String imageURL;
+    private final String stocks;
     private boolean selected;
 
     public Product(String id, String name, String price, String imageURL, String stocks) {
