@@ -58,8 +58,9 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
                         String price = documentChange.getDocument().getString("price");
                         String imageURL = documentChange.getDocument().getString("imageURL");
                         String quantity = documentChange.getDocument().getString("quantity");
+                        String category = documentChange.getDocument().getString("category");
 
-                        productList.add(new Product(id, name, price, imageURL, quantity));
+                        productList.add(new Product(id, name, price, imageURL, quantity, category));
                     }
 
                     productAdapter.notifyDataSetChanged();

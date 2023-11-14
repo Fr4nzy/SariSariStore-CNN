@@ -63,6 +63,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 // Start PlaceOrderActivity when the item is clicked
                 Context context = holder.itemView.getContext();
                 Intent intent = new Intent(context, PlaceOrderActivity.class);
+
+                // Pass the selected item's information as extras
+                intent.putExtra("productName", product.getName());
+                intent.putExtra("productPrice", product.getPrice());
+                intent.putExtra("productStocks", product.getStocks());
+                intent.putExtra("productImageURL", product.getImageURL());
+                intent.putExtra("productCategory", product.getCategory());
+
                 context.startActivity(intent);
             }
         });
