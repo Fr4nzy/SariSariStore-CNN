@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +33,28 @@ public class PlaceOrderActivity extends AppCompatActivity {
         TextView productCategoryTextView = findViewById(R.id.categorySelect);
         TextView productStocksTextView = findViewById(R.id.productQuantity); // Assuming you want to display stocks in this TextView
         ImageView productImageView = findViewById(R.id.previewImg);
+        EditText customQuantityEditText = findViewById(R.id.customQuantityEditText);
+
+        Button quantityConfirmedButton = findViewById(R.id.quantityConfirmed);
+
+        quantityConfirmedButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Retrieve the entered quantity
+                int enteredQuantity = Integer.parseInt(customQuantityEditText.getText().toString());
+
+                // Pass the selected item's information and quantity as extras
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("enteredQuantity", enteredQuantity);
+                resultIntent.putExtra("productName", productName);
+                resultIntent.putExtra("productPrice", productPrice);
+                setResult(RESULT_OK, resultIntent);
+
+                // Finish the PlaceOrderActivity
+                finish();
+            }
+        });
+
 
         productNameTextView.setText(productName);
         productPriceTextView.setText(productPrice);
@@ -40,5 +65,10 @@ public class PlaceOrderActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(productImageURL)
                 .into(productImageView);
+
     }
+
+
+
+
 }

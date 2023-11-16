@@ -37,6 +37,18 @@ public class CartActivity extends AppCompatActivity {
         // Go to the Purchase Activity once the user is done with the Cart
         Button purchaseBtn = findViewById(R.id.btnPurchased);
         purchaseBtn.setOnClickListener(view -> openPurchasedActivity(totalCost));
+
+
+        // Check if there is a result from PlaceOrderActivity
+        if (getIntent().hasExtra("enteredQuantity")) {
+            int enteredQuantity = getIntent().getIntExtra("enteredQuantity", 1);
+
+            // Update the quantity in your selected items list or display it as needed
+            // For example, you can append it to the selectedItemsTextView
+            selectedItemsTextView = findViewById(R.id.selectedItemsTextView);
+            selectedItemsTextView.append("\nQuantity: " + enteredQuantity);
+        }
+
     }
 
     private void openPurchasedActivity(double totalCost) {

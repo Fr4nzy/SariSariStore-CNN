@@ -1,10 +1,12 @@
 package org.lu.sarisaristorepos;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     private List<Product> productList;
     private ProductSelectionListener productSelectionListener;
 
+    // Modify the constructor to accept an optional listener
     public ProductAdapter(List<Product> productList, ProductSelectionListener listener) {
         this.productList = productList;
         this.productSelectionListener = listener;
@@ -35,12 +38,12 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Product product = productList.get(position);
+        final Product product = productList.get(position); // Make 'product' final
 
         holder.productName.setText(product.getName());
         holder.productPrice.setText(product.getPrice());
         holder.productStocks.setText(product.getStocks());
-        holder.productCheckBox.setChecked(product.isSelected());
+
 
         // Load the product image using Glide
         Glide.with(holder.productImage.getContext())
@@ -48,14 +51,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 .apply(new RequestOptions().centerCrop())
                 .into(holder.productImage);
 
-        holder.productCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                product.setSelected(isChecked);
-                // Notify the activity that a product's selection has changed
-                productSelectionListener.onProductSelectionChanged();
-            }
-        });
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,22 +67,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 intent.putExtra("productImageURL", product.getImageURL());
                 intent.putExtra("productCategory", product.getCategory());
 
-                context.startActivity(intent);
+                ((Activity) context).startActivityForResult(intent, 1);
             }
         });
+
     }
+
 
     @Override
     public int getItemCount() {
         return productList.size();
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+
+    class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
         TextView productName;
         TextView productPrice;
         TextView productStocks;
-        CheckBox productCheckBox;
+
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,9 +93,9 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
             productStocks = itemView.findViewById(R.id.productStocks);
-            productCheckBox = itemView.findViewById(R.id.productCheckBox);
         }
     }
+
 
     // Define an interface to handle product selection changes
     public interface ProductSelectionListener {

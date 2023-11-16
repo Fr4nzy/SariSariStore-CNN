@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,7 +41,7 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
         productList = new ArrayList<>();
-        productAdapter = new ProductAdapter(productList, this); // Pass 'this' to indicate the current activity implements the interface
+        productAdapter = new ProductAdapter(productList,null); // Remove the listener
         recyclerView.setAdapter(productAdapter);
 
         db = FirebaseFirestore.getInstance();
@@ -60,7 +61,7 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
                         String quantity = documentChange.getDocument().getString("quantity");
                         String category = documentChange.getDocument().getString("category");
 
-                        productList.add(new Product(id, name, price, imageURL, quantity, category));
+                        productList.add(new Product(id, name, price, imageURL, quantity, category, quantity));
                     }
 
                     productAdapter.notifyDataSetChanged();
@@ -84,6 +85,50 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
         // Add a click listener to the search button
         searchButton.setOnClickListener(v -> searchProducts());
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
+            // Handle the result from PlaceOrderActivity
+            int enteredQuantity = data.getIntExtra("enteredQuantity", 1);
+            String productName = data.getStringExtra("productName");
+            String productPrice = data.getStringExtra("productPrice");
+
+            // Update the quantity in your selected items list or perform the necessary action
+            // For example, you can update the quantity in the productList
+            updateProductList(productName, enteredQuantity);
+
+            // Find the product and set it as selected
+            selectProduct(productName);
+
+            // Update the cart indicator
+            updateCartIndicator();
+        }
+    }
+
+    private void selectProduct(String productName) {
+        for (Product product : productList) {
+            if (product.getName().equals(productName)) {
+                product.setSelected(true);
+                break; // Assuming product names are unique, exit loop once found
+            }
+        }
+        productAdapter.notifyDataSetChanged();
+    }
+
+
+    private void updateProductList(String productName, int enteredQuantity) {
+        for (Product product : productList) {
+            if (product.getName().equals(productName)) {
+                product.setQuantity(String.valueOf(enteredQuantity));
+                break; // Assuming product names are unique, exit loop once found
+            }
+        }
+
+        productAdapter.notifyDataSetChanged();
     }
 
     @Override

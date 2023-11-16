@@ -42,7 +42,7 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
         productList = new ArrayList<>();
-        productAdapter = new ProductAdapter(productList, this); // Pass 'this' to indicate the current activity implements the interface
+        productAdapter = new ProductAdapter(productList, this);
         recyclerView.setAdapter(productAdapter);
 
         db = FirebaseFirestore.getInstance();
@@ -61,8 +61,9 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
                         String imageURL = documentChange.getDocument().getString("imageURL");
                         String stocks = documentChange.getDocument().getString("stocks");
                         String category = documentChange.getDocument().getString("category");
+                        String quantity = documentChange.getDocument().getString("quantity");
 
-                        productList.add(new Product(id, name, price, imageURL, stocks, category));
+                        productList.add(new Product(id, name, price, imageURL, stocks, category,quantity));
                     }
 
                     productAdapter.notifyDataSetChanged();
