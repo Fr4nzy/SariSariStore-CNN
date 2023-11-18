@@ -49,26 +49,25 @@
         app:layout_constraintTop_toBottomOf="@+id/productName" />
 
     <TextView
-        android:id="@+id/labelQuantity"
+        android:id="@+id/productCategory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/productPrice"
-        android:text="Stock: "
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
+        android:text="Category: "
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productPrice">
-    </TextView>
+        app:layout_constraintTop_toBottomOf="@+id/productPrice" />
 
     <TextView
-        android:id="@+id/productStocks"
+        android:id="@+id/categoryInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/productPrice"
-        android:layout_marginStart="62dp"
         android:layout_marginTop="10dp"
-        android:text="00"
-        app:layout_constraintStart_toStartOf="@+id/labelQuantity"
-        app:layout_constraintTop_toBottomOf="@+id/productPrice" />
+        android:layout_marginStart="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productCategory" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

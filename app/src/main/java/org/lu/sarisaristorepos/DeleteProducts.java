@@ -2,7 +2,11 @@ package org.lu.sarisaristorepos;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,12 +49,51 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         productAdapter = new ProductAdapter(productList, this);
         recyclerView.setAdapter(productAdapter);
 
+        // Define the category list
+        String[] categories = {"Canned Goods", "Condiments", "Powdered Beverages", "Instant Noodles", "Others"};
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Get the selected category from the Spinner
+        // Apply the adapter to the spinner
+        Spinner categorySpinner = findViewById(R.id.categorySpinner);
+        categorySpinner.setAdapter(adapter);
+
         db = FirebaseFirestore.getInstance();
 
         selectedItems = new ArrayList<>(); // Initialize the list of selected items
 
-        // Load products from Firestore
-        db.collection("products").get().addOnCompleteListener(task -> {
+        categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                // Load products from Firestore based on the selected category
+                String selectedCategory = categorySpinner.getSelectedItem().toString();
+                loadProducts(selectedCategory);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do nothing here
+            }
+        });
+
+        // Initial load of products based on the default selected category
+        if (categorySpinner.getSelectedItem() != null) {  // Check if selectedItem is not null
+            loadProducts(categorySpinner.getSelectedItem().toString());
+        }
+
+        // Add a click listener to the "Delete" button
+        deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
+    }
+
+    private void loadProducts(String selectedCategory) {
+        productList.clear(); // Clear the existing product list
+        // Load products from Firestore based on the selected category
+        db.collection(selectedCategory).get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 QuerySnapshot querySnapshot = task.getResult();
                 if (querySnapshot != null) {
@@ -68,9 +111,6 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
                 }
             }
         });
-
-        // Add a click listener to the "Delete" button
-        deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
     }
 
     @Override

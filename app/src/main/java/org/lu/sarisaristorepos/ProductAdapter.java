@@ -42,6 +42,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         holder.productName.setText(product.getName());
         holder.productPrice.setText(product.getPrice());
+        holder.productCategory.setText(product.getCategory());
 
 
         // Load the product image using Glide
@@ -83,6 +84,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         ImageView productImage;
         TextView productName;
         TextView productPrice;
+        TextView productCategory;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -90,6 +92,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productImage = itemView.findViewById(R.id.productImage);
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
+            productCategory = itemView.findViewById(R.id.categoryInfo);
         }
     }
 

@@ -22,7 +22,6 @@ public class PlaceOrderActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String productName = intent.getStringExtra("productName");
         String productPrice = intent.getStringExtra("productPrice");
-        String productStocks = intent.getStringExtra("productStocks");
         String productImageURL = intent.getStringExtra("productImageURL");
         String productCategory = intent.getStringExtra("productCategory");
 
@@ -30,7 +29,6 @@ public class PlaceOrderActivity extends AppCompatActivity {
         TextView productNameTextView = findViewById(R.id.productName);
         TextView productPriceTextView = findViewById(R.id.productPrice);
         TextView productCategoryTextView = findViewById(R.id.categorySelect);
-        TextView productStocksTextView = findViewById(R.id.productQuantity); // Assuming you want to display stocks in this TextView
         ImageView productImageView = findViewById(R.id.previewImg);
         EditText customQuantityEditText = findViewById(R.id.customQuantityEditText);
 
@@ -47,7 +45,6 @@ public class PlaceOrderActivity extends AppCompatActivity {
                 resultIntent.putExtra("enteredQuantity", enteredQuantity);
                 resultIntent.putExtra("productName", productName);
                 resultIntent.putExtra("productPrice", productPrice);
-                resultIntent.putExtra("productStocks", productStocks); // Include the stocks in the intent
                 setResult(RESULT_OK, resultIntent);
 
                 // Finish the PlaceOrderActivity
@@ -59,7 +56,6 @@ public class PlaceOrderActivity extends AppCompatActivity {
         productNameTextView.setText(productName);
         productPriceTextView.setText(productPrice);
         productCategoryTextView.setText(productCategory);
-        productStocksTextView.setText(productStocks); // Set the quantity or stocks
 
         // Load the product image using Glide
         Glide.with(this)

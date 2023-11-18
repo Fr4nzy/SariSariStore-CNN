@@ -106,8 +106,8 @@ public class AddProducts extends AppCompatActivity {
                     imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         String imageURL = uri.toString();
 
-                        // Create a new document in the "products" collection
-                        DocumentReference productRef = db.collection("products").document();
+                        // Create a new document in the selected category collection
+                        DocumentReference productRef = db.collection(selectedCategory).document(); // Use the selected category
 
                         // Create a Map to store the product data
                         Map<String, Object> productData = new HashMap<>();
