@@ -10,8 +10,8 @@
         android:id="@+id/selectedItemsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="36dp"
         android:text="Selected Items:"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,8 +19,8 @@
 
     <TextView
         android:id="@+id/totalCostTextView"
-        android:layout_width="108dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@id/selectedItemsTextView"
         android:layout_marginTop="24dp"
         android:text="Total Cost: ₱0.00"

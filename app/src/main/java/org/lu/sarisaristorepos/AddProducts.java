@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class AddProducts extends AppCompatActivity {
-    private EditText productNameEditText, productPriceEditText, productQuantityEditText;
+    private EditText productNameEditText, productPriceEditText;
     private Spinner categorySpinner;
     private ImageView previewImageView;
 
@@ -50,7 +50,6 @@ public class AddProducts extends AppCompatActivity {
 
         productNameEditText = findViewById(R.id.productName);
         productPriceEditText = findViewById(R.id.productPrice);
-        productQuantityEditText = findViewById(R.id.productQuantity);
         Button submitButton = findViewById(R.id.btnInsert);
         categorySpinner = findViewById(R.id.categorySelect);
         previewImageView = findViewById(R.id.previewImg);
@@ -87,7 +86,6 @@ public class AddProducts extends AppCompatActivity {
         submitButton.setOnClickListener(v -> {
             String productName = productNameEditText.getText().toString();
             String productPrice = productPriceEditText.getText().toString();
-            String productQuantity = productQuantityEditText.getText().toString();
             String selectedCategory = categorySpinner.getSelectedItem().toString();
 
             // Check if the user is authenticated
@@ -115,7 +113,6 @@ public class AddProducts extends AppCompatActivity {
                         Map<String, Object> productData = new HashMap<>();
                         productData.put("name", productName);
                         productData.put("price", productPrice);
-                        productData.put("quantity", productQuantity);
                         productData.put("category", selectedCategory);
                         productData.put("imageURL", imageURL); // Store the image URL
 
@@ -126,7 +123,6 @@ public class AddProducts extends AppCompatActivity {
                                         // Data inserted successfully
                                         productNameEditText.setText("");
                                         productPriceEditText.setText("");
-                                        productQuantityEditText.setText("");
                                         previewImageView.setImageResource(R.drawable.baseline_image_24); // Reset image view
                                     } else {
                                         // Handle the error

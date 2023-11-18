@@ -109,10 +109,10 @@ public class CashAmountActivity extends AppCompatActivity {
         Button confirmDialogButton = receiptDialog.findViewById(R.id.confirmDialogButton);
 
         // Set receipt details
-        String receiptMessage = "Transaction ID: " + transactionId + "\n" +
-                "Date: " + currentDate + "\n" +
-                "Total Cost: ₱" + String.format("%.2f", totalCost) + "\n" +
-                "Cash Amount: ₱" + String.format("%.2f", cashAmount) + "\n" +
+        String receiptMessage = "Transaction ID: " + transactionId + "\n\n" +
+                "Date: " + currentDate + "\n\n" +
+                "Total Cost: ₱" + String.format("%.2f", totalCost) + "\n\n" +
+                "Cash Amount: ₱" + String.format("%.2f", cashAmount) + "\n\n" +
                 "Change: ₱" + String.format("%.2f", change);
 
         receiptTextView.setText(receiptMessage);

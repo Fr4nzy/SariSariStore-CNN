@@ -42,7 +42,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
         holder.productName.setText(product.getName());
         holder.productPrice.setText(product.getPrice());
-        holder.productStocks.setText(product.getStocks());
 
 
         // Load the product image using Glide
@@ -51,19 +50,21 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 .apply(new RequestOptions().centerCrop())
                 .into(holder.productImage);
 
-
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Start PlaceOrderActivity when the item is clicked
                 Context context = holder.itemView.getContext();
                 Intent intent = new Intent(context, PlaceOrderActivity.class);
+                product.setSelected(!product.isSelected());
 
+                // Notify the listener when the selection changes
+                if (productSelectionListener != null) {
+                    productSelectionListener.onProductSelectionChanged();
+                }
                 // Pass the selected item's information as extras
                 intent.putExtra("productName", product.getName());
                 intent.putExtra("productPrice", product.getPrice());
-                intent.putExtra("productStocks", product.getStocks());
                 intent.putExtra("productImageURL", product.getImageURL());
                 intent.putExtra("productCategory", product.getCategory());
 
@@ -73,18 +74,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     }
 
-
     @Override
     public int getItemCount() {
         return productList.size();
     }
 
-
     class ViewHolder extends RecyclerView.ViewHolder {
         ImageView productImage;
         TextView productName;
         TextView productPrice;
-        TextView productStocks;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -92,16 +90,13 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productImage = itemView.findViewById(R.id.productImage);
             productName = itemView.findViewById(R.id.productName);
             productPrice = itemView.findViewById(R.id.productPrice);
-            productStocks = itemView.findViewById(R.id.productStocks);
         }
     }
-
 
     // Define an interface to handle product selection changes
     public interface ProductSelectionListener {
         void onProductSelectionChanged();
     }
-
     public void setProductList(List<Product> productList) {
         this.productList = productList;
         notifyDataSetChanged();

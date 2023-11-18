@@ -1,5 +1,4 @@
 package org.lu.sarisaristorepos;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -43,11 +42,12 @@ public class PlaceOrderActivity extends AppCompatActivity {
                 // Retrieve the entered quantity
                 int enteredQuantity = Integer.parseInt(customQuantityEditText.getText().toString());
 
-                // Pass the selected item's information and quantity as extras
+                // Pass the selected item's information, quantity, and total cost as extras
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra("enteredQuantity", enteredQuantity);
                 resultIntent.putExtra("productName", productName);
                 resultIntent.putExtra("productPrice", productPrice);
+                resultIntent.putExtra("productStocks", productStocks); // Include the stocks in the intent
                 setResult(RESULT_OK, resultIntent);
 
                 // Finish the PlaceOrderActivity
@@ -67,8 +67,6 @@ public class PlaceOrderActivity extends AppCompatActivity {
                 .into(productImageView);
 
     }
-
-
 
 
 }

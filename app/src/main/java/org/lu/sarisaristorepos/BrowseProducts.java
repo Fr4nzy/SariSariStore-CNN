@@ -2,6 +2,7 @@ package org.lu.sarisaristorepos;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -58,10 +59,9 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
                         String name = documentChange.getDocument().getString("name");
                         String price = documentChange.getDocument().getString("price");
                         String imageURL = documentChange.getDocument().getString("imageURL");
-                        String quantity = documentChange.getDocument().getString("quantity");
                         String category = documentChange.getDocument().getString("category");
 
-                        productList.add(new Product(id, name, price, imageURL, quantity, category, quantity));
+                        productList.add(new Product(id, name, price, imageURL, category));
                     }
 
                     productAdapter.notifyDataSetChanged();
@@ -79,6 +79,10 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
             intent.putStringArrayListExtra("selectedItems", selectedItems);
             intent.putExtra("totalCost", totalCost);
 
+            Log.d("BrowseProducts", "Selected items: " + selectedItems.toString());
+            Log.d("BrowseProducts", "Total cost: " + totalCost);
+
+
             startActivity(intent);
         });
 
@@ -90,19 +94,12 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.d("PlaceOrderActivity", "onActivityResult called");
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null) {
             // Handle the result from PlaceOrderActivity
-            int enteredQuantity = data.getIntExtra("enteredQuantity", 1);
             String productName = data.getStringExtra("productName");
             String productPrice = data.getStringExtra("productPrice");
-
-            // Update the quantity in your selected items list or perform the necessary action
-            // For example, you can update the quantity in the productList
-            updateProductList(productName, enteredQuantity);
-
-            // Find the product and set it as selected
-            selectProduct(productName);
 
             // Update the cart indicator
             updateCartIndicator();
@@ -120,16 +117,6 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
     }
 
 
-    private void updateProductList(String productName, int enteredQuantity) {
-        for (Product product : productList) {
-            if (product.getName().equals(productName)) {
-                product.setQuantity(String.valueOf(enteredQuantity));
-                break; // Assuming product names are unique, exit loop once found
-            }
-        }
-
-        productAdapter.notifyDataSetChanged();
-    }
 
     @Override
     public void onProductSelectionChanged() {

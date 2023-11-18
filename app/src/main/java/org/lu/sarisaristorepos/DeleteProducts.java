@@ -59,11 +59,9 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
                         String name = documentChange.getDocument().getString("name");
                         String price = documentChange.getDocument().getString("price");
                         String imageURL = documentChange.getDocument().getString("imageURL");
-                        String stocks = documentChange.getDocument().getString("stocks");
                         String category = documentChange.getDocument().getString("category");
-                        String quantity = documentChange.getDocument().getString("quantity");
 
-                        productList.add(new Product(id, name, price, imageURL, stocks, category,quantity));
+                        productList.add(new Product(id, name, price, imageURL, category));
                     }
 
                     productAdapter.notifyDataSetChanged();
