@@ -8,11 +8,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
@@ -24,7 +27,7 @@ import java.util.List;
 
 public class DeleteProducts extends AppCompatActivity implements ProductAdapter.ProductSelectionListener {
 
-    private TextView cartIndicatorTextView;
+    private TextView selectionIndicatorTextView;
     private ProductAdapter productAdapter;
     private List<Product> productList;
     private FirebaseFirestore db;
@@ -38,10 +41,10 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         Button deleteButton = findViewById(R.id.deleteButton);
-        cartIndicatorTextView = findViewById(R.id.cartIndicator);
+        selectionIndicatorTextView = findViewById(R.id.selectionIndicator);
 
-        // Make cartIndicator non-clickable
-        cartIndicatorTextView.setClickable(false);
+        // Make selection Indicator non-clickable
+        selectionIndicatorTextView.setClickable(false);
 
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
 
@@ -102,9 +105,10 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
                         String name = documentChange.getDocument().getString("name");
                         String price = documentChange.getDocument().getString("price");
                         String imageURL = documentChange.getDocument().getString("imageURL");
+                        String brand = documentChange.getDocument().getString("brand");
                         String category = documentChange.getDocument().getString("category");
 
-                        productList.add(new Product(id, name, price, imageURL, category));
+                        productList.add(new Product(id, name, price, imageURL,brand, category));
                     }
 
                     productAdapter.notifyDataSetChanged();
@@ -116,25 +120,32 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
     @Override
     public void onProductSelectionChanged() {
         // Handle product selection changes if needed
-        updateCartIndicator();
+        updateSelectionIndicator();
     }
 
     // Show a confirmation dialog before deleting selected items
     private void showDeleteConfirmationDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Delete Confirmation");
-        builder.setMessage("Are you sure you want to delete the selected items?");
-        builder.setPositiveButton("Yes", (dialog, which) -> {
-            // User confirmed deletion, call deleteSelectedProducts()
-            deleteSelectedProducts();
-        });
-        builder.setNegativeButton("No", (dialog, which) -> {
-            // User canceled, do nothing
-        });
+        // Check if there are selected items before showing the dialog
+        if (!selectedItems.isEmpty()) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Delete Confirmation");
+            builder.setMessage("Are you sure you want to delete the selected items?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                // User confirmed deletion, call deleteSelectedProducts()
+                deleteSelectedProducts();
+            });
+            builder.setNegativeButton("No", (dialog, which) -> {
+                // User canceled, do nothing
+            });
 
-        AlertDialog dialog = builder.create();
-        dialog.show();
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        } else {
+            // Notify the user that no items are selected
+            Toast.makeText(this, "Please select items to delete", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void deleteSelectedProducts() {
         if (!selectedItems.isEmpty()) {
@@ -152,10 +163,8 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
                     for (Product product : productList) {
                         if (product.getName().equals(productName) && product.getPrice().equals(productPrice)) {
                             // Delete the product from Firestore
-                            db.collection("products").document(product.getId()).delete();
-
-                            // Remove the product from the local list
-                            productList.remove(product);
+                            DocumentReference productRef = db.collection(product.getCategory()).document(product.getId());
+                            batch.delete(productRef);
 
                             // Delete the image from Firebase Storage
                             deleteImageFromStorage(product.getImageURL());
@@ -166,13 +175,20 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
                 }
             }
 
-            productAdapter.notifyDataSetChanged(); // Update the UI
+            // Commit the batch to Firestore
+            batch.commit().addOnSuccessListener(aVoid -> {
+                // Deletion successful
+                productAdapter.notifyDataSetChanged(); // Update the UI
 
-            // Clear the selected items list
-            selectedItems.clear();
+                // Clear the selected items list
+                selectedItems.clear();
 
-            // Update the cart indicator after the deletion process is complete
-            updateCartIndicator();
+                // Update the selection indicator after the deletion process is complete
+                updateSelectionIndicator();
+            }).addOnFailureListener(e -> {
+                // Handle the error
+                // You may want to implement error handling based on your requirements
+            });
         }
     }
 
@@ -191,7 +207,7 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         });
     }
 
-    public void updateCartIndicator() {
+    public void updateSelectionIndicator() {
         double totalCost = 0.0;
 
         int selectedProductCount = 0; // Track the count of selected products
@@ -204,12 +220,12 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
             }
         }
 
-        // Update the cart indicator text with the count of selected products
-        cartIndicatorTextView.setText("Cart: " + selectedProductCount);
+        // Update the selection indicator text with the count of selected products
+        selectionIndicatorTextView.setText("Cart: " + selectedProductCount);
 
-        // Check if the deletion process is complete and update the cart indicator
+        // Check if the deletion process is complete and update the selection indicator
         if (selectedProductCount == 0 && selectedItems.isEmpty()) {
-            cartIndicatorTextView.setText("Cart: " + selectedProductCount);
+            selectionIndicatorTextView.setText("Cart: " + selectedProductCount);
         }
     }
 

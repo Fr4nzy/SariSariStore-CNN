@@ -30,27 +30,6 @@ public class PlaceOrderActivity extends AppCompatActivity {
         TextView productPriceTextView = findViewById(R.id.productPrice);
         TextView productCategoryTextView = findViewById(R.id.categorySelect);
         ImageView productImageView = findViewById(R.id.previewImg);
-        EditText customQuantityEditText = findViewById(R.id.customQuantityEditText);
-
-        Button quantityConfirmedButton = findViewById(R.id.quantityConfirmed);
-
-        quantityConfirmedButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Retrieve the entered quantity
-                int enteredQuantity = Integer.parseInt(customQuantityEditText.getText().toString());
-
-                // Pass the selected item's information, quantity, and total cost as extras
-                Intent resultIntent = new Intent();
-                resultIntent.putExtra("enteredQuantity", enteredQuantity);
-                resultIntent.putExtra("productName", productName);
-                resultIntent.putExtra("productPrice", productPrice);
-                setResult(RESULT_OK, resultIntent);
-
-                // Finish the PlaceOrderActivity
-                finish();
-            }
-        });
 
 
         productNameTextView.setText(productName);

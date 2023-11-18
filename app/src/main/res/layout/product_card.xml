@@ -42,10 +42,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/productName"
-        android:layout_marginStart="42dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:text="00"
-        app:layout_constraintStart_toStartOf="@+id/labelPrice"
+        app:layout_constraintStart_toEndOf="@+id/labelPrice"
         app:layout_constraintTop_toBottomOf="@+id/productName" />
 
     <TextView
@@ -68,6 +68,27 @@
         android:layout_marginStart="12dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/productCategory" />
+
+    <TextView
+        android:id="@+id/productBrand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productPrice"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:text="Brand: "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/categoryInfo" />
+
+    <TextView
+        android:id="@+id/brandInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/productPrice"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toEndOf="@+id/productBrand"
+        app:layout_constraintTop_toBottomOf="@+id/categoryInfo" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

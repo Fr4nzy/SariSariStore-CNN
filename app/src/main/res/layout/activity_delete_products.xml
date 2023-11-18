@@ -7,7 +7,7 @@
 
 
     <TextView
-        android:id="@+id/cartIndicator"
+        android:id="@+id/selectionIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -21,7 +21,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/cartIndicator"
+        android:layout_below="@id/selectionIndicator"
         android:layout_marginTop="84dp"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,23 +40,23 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/categoryLabel"
+        android:id="@+id/slctcategoryLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="35dp"
         android:text="Choose Category:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cartIndicator" />
+        app:layout_constraintTop_toBottomOf="@+id/selectionIndicator" />
 
     <Spinner
         android:id="@+id/categorySpinner"
-        android:layout_width="136dp"
+        android:layout_width="248dp"
         android:layout_height="27dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="15dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryLabel"
+        app:layout_constraintTop_toBottomOf="@+id/slctcategoryLabel"
         tools:ignore="TouchTargetSizeCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

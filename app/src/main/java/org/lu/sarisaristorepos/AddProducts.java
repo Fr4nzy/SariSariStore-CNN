@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.UUID;
 
 public class AddProducts extends AppCompatActivity {
-    private EditText productNameEditText, productPriceEditText;
+    private EditText productNameEditText, productPriceEditText, productBrandEditText;
     private Spinner categorySpinner;
     private ImageView previewImageView;
 
@@ -50,6 +50,7 @@ public class AddProducts extends AppCompatActivity {
 
         productNameEditText = findViewById(R.id.productName);
         productPriceEditText = findViewById(R.id.productPrice);
+        productBrandEditText = findViewById(R.id.productBrand);
         Button submitButton = findViewById(R.id.btnInsert);
         categorySpinner = findViewById(R.id.categorySelect);
         previewImageView = findViewById(R.id.previewImg);
@@ -86,54 +87,72 @@ public class AddProducts extends AppCompatActivity {
         submitButton.setOnClickListener(v -> {
             String productName = productNameEditText.getText().toString();
             String productPrice = productPriceEditText.getText().toString();
+            String productBrand = productBrandEditText.getText().toString();
             String selectedCategory = categorySpinner.getSelectedItem().toString();
 
-            // Check if the user is authenticated
-            if (auth.getCurrentUser() != null) {
-                // Generate a unique image filename (e.g., using UUID)
-                String imageFileName = UUID.randomUUID().toString();
+            // Check if an image is selected
+            if (!productName.isEmpty() && !productPrice.isEmpty() && !productBrand.isEmpty()) {
+                // Check if the user is authenticated
+                if (auth.getCurrentUser() != null) {
+                    // Check if any of the fields is empty
+                    if (selectedImageUri != null) {
+                        // Generate a unique image filename (e.g., using UUID)
+                        String imageFileName = UUID.randomUUID().toString();
 
-                // Create a StorageReference with the image filename
-                StorageReference imageRef = storageReference.child("images/" + imageFileName);
+                        // Create a StorageReference with the image filename
+                        StorageReference imageRef = storageReference.child("images/" + imageFileName);
 
-                // Upload the selected image to Firebase Storage
-                UploadTask uploadTask = imageRef.putFile(selectedImageUri);
+                        // Upload the selected image to Firebase Storage
+                        UploadTask uploadTask = imageRef.putFile(selectedImageUri);
 
-                uploadTask.addOnSuccessListener(taskSnapshot -> {
-                    // Image uploaded successfully
+                        uploadTask.addOnSuccessListener(taskSnapshot -> {
+                            // Image uploaded successfully
+                            // Get the download URL of the uploaded image
+                            imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                String imageURL = uri.toString();
 
-                    // Get the download URL of the uploaded image
-                    imageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                        String imageURL = uri.toString();
+                                // Create a new document in the selected category collection
+                                DocumentReference productRef = db.collection(selectedCategory).document(); // Use the selected category
 
-                        // Create a new document in the selected category collection
-                        DocumentReference productRef = db.collection(selectedCategory).document(); // Use the selected category
+                                // Create a Map to store the product data
+                                Map<String, Object> productData = new HashMap<>();
+                                productData.put("name", productName);
+                                productData.put("price", productPrice);
+                                productData.put("brand", productBrand);
+                                productData.put("category", selectedCategory);
+                                productData.put("imageURL", imageURL); // Store the image URL
 
-                        // Create a Map to store the product data
-                        Map<String, Object> productData = new HashMap<>();
-                        productData.put("name", productName);
-                        productData.put("price", productPrice);
-                        productData.put("category", selectedCategory);
-                        productData.put("imageURL", imageURL); // Store the image URL
-
-                        // Set the data in Firestore
-                        productRef.set(productData)
-                                .addOnCompleteListener(task -> {
-                                    if (task.isSuccessful()) {
-                                        // Data inserted successfully
-                                        productNameEditText.setText("");
-                                        productPriceEditText.setText("");
-                                        previewImageView.setImageResource(R.drawable.baseline_image_24); // Reset image view
-                                    } else {
-                                        // Handle the error
-                                        Toast.makeText(this, "Fail Insertion", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    });
-                });
+                                // Set the data in Firestore
+                                productRef.set(productData)
+                                        .addOnCompleteListener(task -> {
+                                            if (task.isSuccessful()) {
+                                                // Data inserted successfully
+                                                productNameEditText.setText("");
+                                                productPriceEditText.setText("");
+                                                productBrandEditText.setText("");
+                                                previewImageView.setImageResource(R.drawable.baseline_image_24); // Reset image view
+                                            } else {
+                                                // Handle the error
+                                                Toast.makeText(this, "Fail Insertion", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                            });
+                        });
+                    } else {
+                        // Notify the user that an image must be selected
+                        Toast.makeText(this, "Please select an image", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } else {
+                // Notify the user that fields can't be empty
+                Toast.makeText(this, "Fields can't be empty", Toast.LENGTH_SHORT).show();
             }
         });
+
+
     }
+
+
 
     // Helper method to display the selected image
     private void displaySelectedImage() {

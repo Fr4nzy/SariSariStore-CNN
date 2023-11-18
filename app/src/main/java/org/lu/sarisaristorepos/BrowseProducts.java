@@ -11,16 +11,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class BrowseProducts extends AppCompatActivity implements ProductAdapter.ProductSelectionListener {
 
@@ -44,13 +46,14 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
         searchEditText = findViewById(R.id.searchEditText);
         searchButton = findViewById(R.id.searchButton);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
+        recyclerView.setVerticalScrollBarEnabled(false); // Hide vertical scrollbar
 
         productList = new ArrayList<>();
         productAdapter = new ProductAdapter(productList,null); // Remove the listener
         recyclerView.setAdapter(productAdapter);
 
         // Define the category list
-        String[] categories = {"Canned Goods", "Condiments", "Powdered Beverages", "Instant Noodles", "Others"};
+        String[] categories = {"All Products", "Canned Goods", "Condiments", "Powdered Beverages", "Instant Noodles", "Others"};
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
@@ -65,7 +68,12 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
 
         db = FirebaseFirestore.getInstance();
 
+
+
         selectedItems = new ArrayList<>(); // Initialize the list of selected items
+
+        // Initial load of products based on the default selected category
+        loadProducts("All Products"); // Load all products by default
 
         categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -107,27 +115,81 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
 
     }
 
-    private void loadProducts(String selectedCategory) {
-        productList.clear(); // Clear the existing product list
-        // Load products from Firestore based on the selected category
-        db.collection(selectedCategory).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot != null) {
-                    for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
-                        String id = documentChange.getDocument().getId(); // Get the Firestore document ID
+    // Load all products from the specified collections
+    private void loadAllProducts() {
+        // List of collections to load products from
+        String[] allCollections = {"Canned Goods", "Condiments", "Powdered Beverages", "Instant Noodles", "Others"};
+
+        // Counter to track the number of collections loaded
+        AtomicInteger collectionsLoaded = new AtomicInteger();
+
+        // Create a list to store all tasks
+        List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+
+        // Iterate through each collection and create a task for each
+        for (String collection : allCollections) {
+            Task<QuerySnapshot> task = db.collection(collection).get();
+            tasks.add(task);
+        }
+
+        Tasks.whenAllSuccess(tasks).addOnSuccessListener(querySnapshotsList -> {
+            // Clear the existing product list before adding products from all collections
+            productList.clear();
+
+            // Iterate through each query snapshot list and add products to the list
+            for (Object querySnapshots : querySnapshotsList) {
+                if (querySnapshots instanceof QuerySnapshot) {
+                    QuerySnapshot snapshot = (QuerySnapshot) querySnapshots;
+                    for (DocumentChange documentChange : snapshot.getDocumentChanges()) {
+                        String id = documentChange.getDocument().getId();
                         String name = documentChange.getDocument().getString("name");
                         String price = documentChange.getDocument().getString("price");
                         String imageURL = documentChange.getDocument().getString("imageURL");
+                        String brand = documentChange.getDocument().getString("brand");
                         String category = documentChange.getDocument().getString("category");
 
-                        productList.add(new Product(id, name, price, imageURL, category));
+                        productList.add(new Product(id, name, price, imageURL, brand, category));
                     }
-
-                    productAdapter.notifyDataSetChanged();
                 }
             }
+
+            // Notify the adapter after all collections have been processed
+            productAdapter.notifyDataSetChanged();
         });
+
+
+    }
+
+
+
+    private void loadProducts(String selectedCategory) {
+        productList.clear(); // Clear the existing product list
+
+        if ("All Products".equals(selectedCategory)) {
+            // If "All Products" is selected, load products from multiple collections
+            loadAllProducts();
+        } else {
+            // Load products from Firestore based on the selected category
+            db.collection(selectedCategory).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null) {
+                        for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
+                            String id = documentChange.getDocument().getId(); // Get the Firestore document ID
+                            String name = documentChange.getDocument().getString("name");
+                            String price = documentChange.getDocument().getString("price");
+                            String imageURL = documentChange.getDocument().getString("imageURL");
+                            String brand = documentChange.getDocument().getString("brand");
+                            String category = documentChange.getDocument().getString("category");
+
+                            productList.add(new Product(id, name, price, imageURL, brand, category));
+                        }
+
+                        productAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        }
     }
 
     @Override

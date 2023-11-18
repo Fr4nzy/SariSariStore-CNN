@@ -30,6 +30,18 @@
         app:layout_constraintTop_toBottomOf="@+id/LabelManageActivity" />
 
     <EditText
+        android:id="@+id/productBrand"
+        android:layout_width="240dp"
+        android:layout_height="56dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="Item Brand"
+        android:inputType="text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productPrice" />
+
+    <EditText
         android:id="@+id/productPrice"
         android:layout_width="240dp"
         android:layout_height="56dp"
@@ -48,7 +60,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/productBrand" />
 
     <ImageView
         android:id="@+id/previewImg"

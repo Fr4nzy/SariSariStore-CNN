@@ -32,70 +32,70 @@
         android:layout_width="240dp"
         android:layout_height="56dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="Item Name"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/previewImg" />
+        app:layout_constraintTop_toBottomOf="@+id/itemLabel" />
 
     <TextView
         android:id="@+id/productPrice"
         android:layout_width="240dp"
         android:layout_height="56dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:hint="Item Price"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productName" />
-
-    <TextView
-        android:id="@+id/productQuantity"
-        android:layout_width="240dp"
-        android:layout_height="56dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
-        android:ems="10"
-        android:hint="Item Quantity"
-        android:inputType="numberSigned"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categorySelect" />
+        app:layout_constraintTop_toBottomOf="@+id/priceLabel" />
 
     <TextView
         android:id="@+id/categorySelect"
-        android:layout_width="240dp"
-        android:layout_height="56dp"
+        android:layout_width="282dp"
+        android:layout_height="58dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:hint="Category"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/categoryLabel" />
 
-    <EditText
-        android:id="@+id/customQuantityEditText"
-        android:layout_width="240dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="62dp"
-        android:ems="10"
-        android:hint="Custom Quantity"
-        android:inputType="number"
-        android:textSize="25sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productQuantity" />
-
-    <Button
-        android:id="@+id/quantityConfirmed"
+    <TextView
+        android:id="@+id/itemLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="3dp"
-        android:text="Confirm"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="7dp"
+        android:text="Product Name"
+        android:textSize="28sp"
+        android:visibility="visible"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/customQuantityEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/previewImg" />
+
+    <TextView
+        android:id="@+id/priceLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="10dp"
+        android:text="Price"
+        android:textSize="28sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productName" />
+
+    <TextView
+        android:id="@+id/categoryLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="132dp"
+        android:text="Category"
+        android:textSize="28sp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/productName" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
