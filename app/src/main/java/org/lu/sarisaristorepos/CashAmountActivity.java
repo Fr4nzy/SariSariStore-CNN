@@ -136,7 +136,8 @@ public class CashAmountActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Close the dialog
                 receiptDialog.dismiss();
-
+                BrowseProducts();
+                finish();
                 // Show a confirmation message or perform additional actions if needed
                 Toast.makeText(CashAmountActivity.this, "Transaction confirmed!", Toast.LENGTH_SHORT).show();
             }
@@ -160,5 +161,10 @@ public class CashAmountActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return dateFormat.format(calendar.getTime());
+    }
+
+    private void BrowseProducts(){
+        Intent intent = new Intent(this, BrowseProducts.class);
+        startActivity(intent);
     }
 }

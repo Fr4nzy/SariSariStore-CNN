@@ -14,6 +14,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -24,6 +27,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DeleteProducts extends AppCompatActivity implements ProductAdapter.ProductSelectionListener {
 
@@ -53,7 +57,7 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         recyclerView.setAdapter(productAdapter);
 
         // Define the category list
-        String[] categories = {"Canned Goods", "Condiments", "Powdered Beverages", "Instant Noodles", "Others"};
+        String[] categories = {"All Products", "Canned Goods", "Condiments", "Powdered Beverages", "Instant Noodles", "Others"};
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
@@ -84,37 +88,82 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
             }
         });
 
-        // Initial load of products based on the default selected category
-        if (categorySpinner.getSelectedItem() != null) {  // Check if selectedItem is not null
-            loadProducts(categorySpinner.getSelectedItem().toString());
-        }
-
         // Add a click listener to the "Delete" button
         deleteButton.setOnClickListener(v -> showDeleteConfirmationDialog());
     }
 
     private void loadProducts(String selectedCategory) {
         productList.clear(); // Clear the existing product list
-        // Load products from Firestore based on the selected category
-        db.collection(selectedCategory).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                QuerySnapshot querySnapshot = task.getResult();
-                if (querySnapshot != null) {
-                    for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
-                        String id = documentChange.getDocument().getId(); // Get the Firestore document ID
+
+        if ("All Products".equals(selectedCategory)) {
+            // If "All Products" is selected, load products from multiple collections
+            loadAllProducts();
+        } else {
+            // Load products from Firestore based on the selected category
+            db.collection(selectedCategory).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    QuerySnapshot querySnapshot = task.getResult();
+                    if (querySnapshot != null) {
+                        for (DocumentChange documentChange : querySnapshot.getDocumentChanges()) {
+                            String id = documentChange.getDocument().getId(); // Get the Firestore document ID
+                            String name = documentChange.getDocument().getString("name");
+                            String price = documentChange.getDocument().getString("price");
+                            String imageURL = documentChange.getDocument().getString("imageURL");
+                            String brand = documentChange.getDocument().getString("brand");
+                            String category = documentChange.getDocument().getString("category");
+
+                            productList.add(new Product(id, name, price, imageURL, brand, category));
+                        }
+
+                        productAdapter.notifyDataSetChanged();
+                    }
+                }
+            });
+        }
+    }
+
+    // Load all products from the specified collections
+    private void loadAllProducts() {
+        // List of collections to load products from
+        String[] allCollections = {"Canned Goods", "Condiments", "Powdered Beverages", "Instant Noodles", "Others"};
+
+        // Counter to track the number of collections loaded
+        AtomicInteger collectionsLoaded = new AtomicInteger();
+
+        // Create a list to store all tasks
+        List<Task<QuerySnapshot>> tasks = new ArrayList<>();
+
+        // Iterate through each collection and create a task for each
+        for (String collection : allCollections) {
+            Task<QuerySnapshot> task = db.collection(collection).get();
+            tasks.add(task);
+        }
+
+        Tasks.whenAllSuccess(tasks).addOnSuccessListener(querySnapshotsList -> {
+            // Clear the existing product list before adding products from all collections
+            productList.clear();
+
+            // Iterate through each query snapshot list and add products to the list
+            for (Object querySnapshots : querySnapshotsList) {
+                if (querySnapshots instanceof QuerySnapshot) {
+                    QuerySnapshot snapshot = (QuerySnapshot) querySnapshots;
+                    for (DocumentChange documentChange : snapshot.getDocumentChanges()) {
+                        String id = documentChange.getDocument().getId();
                         String name = documentChange.getDocument().getString("name");
                         String price = documentChange.getDocument().getString("price");
                         String imageURL = documentChange.getDocument().getString("imageURL");
                         String brand = documentChange.getDocument().getString("brand");
                         String category = documentChange.getDocument().getString("category");
 
-                        productList.add(new Product(id, name, price, imageURL,brand, category));
+                        productList.add(new Product(id, name, price, imageURL, brand, category));
                     }
-
-                    productAdapter.notifyDataSetChanged();
                 }
             }
+
+            // Notify the adapter after all collections have been processed
+            productAdapter.notifyDataSetChanged();
         });
+
     }
 
     @Override

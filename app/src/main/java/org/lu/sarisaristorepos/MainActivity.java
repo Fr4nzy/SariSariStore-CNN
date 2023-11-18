@@ -24,18 +24,21 @@ public class MainActivity extends AppCompatActivity {
         pos.setOnClickListener(v -> PointOfSale());
         productInsertDeleteReview.setOnClickListener(view -> InsertDeleteReview());
 
-        logout.setOnClickListener(v -> finish());
-
+        logout.setOnClickListener(v -> logout());
     }
 
     private void PointOfSale() {
         Intent intent = new Intent(this, PointOfSaleActivity.class);
         startActivity(intent);
-
     }
-    private void InsertDeleteReview(){
+
+    private void InsertDeleteReview() {
         Intent intent = new Intent(this, InsertDeleteReview.class);
         startActivity(intent);
     }
 
+    private void logout() {
+        // Finish all activities in the back stack
+        finishAffinity();
+    }
 }

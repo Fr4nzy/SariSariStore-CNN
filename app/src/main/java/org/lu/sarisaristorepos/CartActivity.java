@@ -17,28 +17,10 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         // Retrieve data from the intent
-        selectedItems = getIntent().getStringArrayListExtra("selectedItems");
-        double totalCost = getIntent().getDoubleExtra("totalCost", 0.0);
-
-        // Check if there is a result from PlaceOrderActivity
-        if (getIntent().hasExtra("enteredQuantity")) {
-            TextView selectedItemsTextView = findViewById(R.id.selectedItemsTextView);
-
-            // Retrieve the entered quantity and product details
-            String productName = getIntent().getStringExtra("productName");
-            int enteredQuantity = getIntent().getIntExtra("enteredQuantity", 1);
-            double productPricePerUnit = getIntent().getDoubleExtra("productPrice", 0.0);
-
-            // Update the quantity in your selected items list or display it as needed
-            // For example, you can append it to the selectedItemsTextView
-            selectedItemsTextView.append("\nProduct: " + productName + ", \nQuantity: " + enteredQuantity + ", \nPrice per Unit: ₱" + productPricePerUnit);
-
-            // Calculate the updated total cost
-            double productTotalCost = productPricePerUnit * enteredQuantity;
-
-            // Append the total cost for this item to the selectedItemsTextView
-            selectedItemsTextView.append("\nTotal Cost for " + productName + ": ₱" + String.format("%.2f", productTotalCost));
+        if (getIntent().hasExtra("selectedItems")) {
+            selectedItems = getIntent().getStringArrayListExtra("selectedItems");
         }
+        double totalCost = getIntent().getDoubleExtra("totalCost", 0.0);
 
         // Display selected items in CartActivity's layout
         TextView selectedItemsTextView = findViewById(R.id.selectedItemsTextView);
@@ -55,9 +37,35 @@ public class CartActivity extends AppCompatActivity {
         TextView totalCostTextView = findViewById(R.id.totalCostTextView);
         totalCostTextView.setText("Total Cost: ₱" + String.format("%.2f", totalCost));
 
-        // Go to the Purchase Activity once the user is done with the Cart
+        // Calculate and display the cost for each item
+        calculateCostPerItem();
+
+        // After updating the cart and calculating the total cost
         Button purchaseBtn = findViewById(R.id.btnPurchased);
-        purchaseBtn.setOnClickListener(view -> openPurchasedActivity(totalCost));
+        purchaseBtn.setOnClickListener(view -> {
+            // Prepare the result intent with updated information
+            openPurchasedActivity(totalCost);
+            finish();
+        });
+    }
+
+    private void calculateCostPerItem() {
+        // Iterate through selected items and calculate and display the cost for each item
+        for (String selectedItem : selectedItems) {
+            // Assuming the format is "Product Name - Price"
+            String[] parts = selectedItem.split(" = ");
+            if (parts.length == 2) {
+                String productName = parts[0];
+                double price = Double.parseDouble(parts[1]);
+
+                // Find the TextView corresponding to the item and display the cost
+                int resID = getResources().getIdentifier(productName.toLowerCase().replaceAll("\\s+", ""), "id", getPackageName());
+                TextView itemCostTextView = findViewById(resID);
+                if (itemCostTextView != null) {
+                    itemCostTextView.setText("Cost for " + productName + ": ₱" + String.format("%.2f", price));
+                }
+            }
+        }
     }
 
     private void openPurchasedActivity(double totalCost) {

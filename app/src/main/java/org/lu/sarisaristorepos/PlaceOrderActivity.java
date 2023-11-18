@@ -1,6 +1,6 @@
 package org.lu.sarisaristorepos;
-import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,12 +25,13 @@ public class PlaceOrderActivity extends AppCompatActivity {
         String productImageURL = intent.getStringExtra("productImageURL");
         String productCategory = intent.getStringExtra("productCategory");
 
-        // Set the information in the TextViews
+        // Set the information in the TextViews, ImageView, and Buttons
         TextView productNameTextView = findViewById(R.id.productName);
         TextView productPriceTextView = findViewById(R.id.productPrice);
         TextView productCategoryTextView = findViewById(R.id.categorySelect);
         ImageView productImageView = findViewById(R.id.previewImg);
-
+        Button addToCart = findViewById(R.id.addtocartBtn);
+        Button purchase = findViewById(R.id.purchaseBtn);
 
         productNameTextView.setText(productName);
         productPriceTextView.setText(productPrice);
@@ -41,7 +42,22 @@ public class PlaceOrderActivity extends AppCompatActivity {
                 .load(productImageURL)
                 .into(productImageView);
 
+        // Add a click listener to the "Add to Cart" button
+        addToCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Pass the selected item's information back to BrowseProducts
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra("productName", productName);
+                resultIntent.putExtra("productPrice", productPrice);
+                resultIntent.putExtra("productCategory", productCategory);
+
+                // Set the result and finish the activity
+                setResult(RESULT_OK, resultIntent);
+                finish();
+            }
+        });
+
+
     }
-
-
 }

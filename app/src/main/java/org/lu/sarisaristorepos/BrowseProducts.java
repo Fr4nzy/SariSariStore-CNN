@@ -68,8 +68,6 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
 
         db = FirebaseFirestore.getInstance();
 
-
-
         selectedItems = new ArrayList<>(); // Initialize the list of selected items
 
         // Initial load of products based on the default selected category
@@ -115,6 +113,27 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            // Update the cartIndicator and other relevant information based on the result
+            if (data != null) {
+                String productName = data.getStringExtra("productName");
+                String productPrice = data.getStringExtra("productPrice");
+                String productCategory = data.getStringExtra("productCategory");
+
+                // Add the selected item to the cart
+                selectedItems.add(productName + " - " + productPrice);
+
+                // Update your cartIndicatorTextView and other UI elements as needed
+                // For example:
+                updateCartIndicator();
+            }
+        }
+    }
+
     // Load all products from the specified collections
     private void loadAllProducts() {
         // List of collections to load products from
@@ -157,10 +176,7 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
             productAdapter.notifyDataSetChanged();
         });
 
-
     }
-
-
 
     private void loadProducts(String selectedCategory) {
         productList.clear(); // Clear the existing product list

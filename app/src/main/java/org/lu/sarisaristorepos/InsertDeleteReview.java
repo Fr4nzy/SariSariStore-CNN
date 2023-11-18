@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 
 public class InsertDeleteReview extends AppCompatActivity {
@@ -21,6 +22,7 @@ public class InsertDeleteReview extends AppCompatActivity {
 
         add.setOnClickListener(view -> setAdd());
         delete.setOnClickListener(view -> setDelete());
+        review.setOnClickListener(view -> setReview());
     }
 
     private void setAdd(){
@@ -29,6 +31,11 @@ public class InsertDeleteReview extends AppCompatActivity {
     }
     private void setDelete(){
         Intent intent = new Intent(this, DeleteProducts.class);
+        startActivity(intent);
+    }
+
+    private void setReview(){
+        Intent intent = new Intent(this, ReviewProducts.class);
         startActivity(intent);
     }
 
