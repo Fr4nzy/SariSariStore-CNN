@@ -1,7 +1,6 @@
 package org.lu.sarisaristorepos;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.os.Bundle;
@@ -25,7 +24,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -153,18 +151,13 @@ public class AddProducts extends AppCompatActivity {
     }
 
 
-
     // Helper method to display the selected image
     private void displaySelectedImage() {
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), selectedImageUri);
-            Glide.with(this)
-                    .load(selectedImageUri)
-                    .apply(new RequestOptions().centerCrop())
-                    .into(previewImageView);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Glide.with(this)
+                .load(selectedImageUri)
+                .apply(new RequestOptions().centerCrop())
+                .into(previewImageView);
     }
+
 
 }
