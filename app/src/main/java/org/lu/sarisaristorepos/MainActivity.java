@@ -1,10 +1,10 @@
 package org.lu.sarisaristorepos;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -17,14 +17,15 @@ public class MainActivity extends AppCompatActivity {
 
         pos = findViewById(R.id.posBtn);
         productInsertDeleteReview = findViewById(R.id.productsBtn);
-
         logout = findViewById(R.id.logoutBtn);
 
         pos.setOnClickListener(v -> PointOfSale());
         productInsertDeleteReview.setOnClickListener(view -> InsertDeleteReview());
 
         logout.setOnClickListener(v -> logout());
+
     }
+
 
     private void PointOfSale() {
         Intent intent = new Intent(this, PointOfSaleActivity.class);
@@ -40,5 +41,4 @@ public class MainActivity extends AppCompatActivity {
         // Finish all activities in the back stack
         finishAffinity();
     }
-    
 }
