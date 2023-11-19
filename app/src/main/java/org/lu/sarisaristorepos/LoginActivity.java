@@ -40,10 +40,10 @@ public class LoginActivity extends AppCompatActivity {
             if (!pass.isEmpty()) {
                 auth.signInWithEmailAndPassword(email, pass)
                         .addOnSuccessListener(authResult -> {
-                            Toast.makeText(LoginActivity.this, "Login Success", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, R.string.login_success_message, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
                             finish();
-                        }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Login Failed" + e.getMessage(), Toast.LENGTH_SHORT).show());
+                        }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, R.string.login_failed_message + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         } else if (email.isEmpty()) {
             editUserTextName.setError("Email cannot be empty");

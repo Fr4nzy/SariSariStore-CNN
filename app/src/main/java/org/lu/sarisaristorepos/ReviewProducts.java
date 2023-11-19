@@ -69,14 +69,12 @@ public class ReviewProducts extends AppCompatActivity {
                 totalTransactions.set(getTransactionCount(transactionSnapshot));
 
                 // Display the total number of products and transactions
-                totalProductsTextView.setText("Total Products: " + totalProducts);
-                totalTransactionsTextView.setText("Total Transactions: " + totalTransactions);
-            }).addOnFailureListener(e -> {
-                Log.e("ReviewProducts", "Error getting transactions", e);
-            });
-        }).addOnFailureListener(e -> {
-            Log.e("ReviewProducts", "Error getting products", e);
-        });
+                totalProductsTextView.setText(getString(R.string.total_products_label, totalProducts.get()));
+                totalTransactionsTextView.setText(getString(R.string.total_transactions_label, totalTransactions.get()));
+
+
+            }).addOnFailureListener(e -> Log.e("ReviewProducts", "Error getting transactions", e));
+        }).addOnFailureListener(e -> Log.e("ReviewProducts", "Error getting products", e));
     }
 
 

@@ -33,9 +33,9 @@ public class CartActivity extends AppCompatActivity {
 
         selectedItemsTextView.setText(itemsText.toString());
 
-        // Display the overall total cost
         TextView totalCostTextView = findViewById(R.id.totalCostTextView);
-        totalCostTextView.setText("Total Cost: ₱" + String.format("%.2f", totalCost));
+        // Display the overall total cost
+        totalCostTextView.setText(getString(R.string.total_cost_label, totalCost));
 
         // Calculate and display the cost for each item
         calculateCostPerItem();
@@ -62,7 +62,7 @@ public class CartActivity extends AppCompatActivity {
                 int resID = getResources().getIdentifier(productName.toLowerCase().replaceAll("\\s+", ""), "id", getPackageName());
                 TextView itemCostTextView = findViewById(resID);
                 if (itemCostTextView != null) {
-                    itemCostTextView.setText("Cost for " + productName + ": ₱" + String.format("%.2f", price));
+                    itemCostTextView.setText(String.format("Cost for %s: ₱%s", productName, String.format("%.2f", price)));
                 }
             }
         }

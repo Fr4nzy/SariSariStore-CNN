@@ -26,10 +26,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BrowseProducts extends AppCompatActivity implements ProductAdapter.ProductSelectionListener {
 
-    private RecyclerView recyclerView;
     private TextView cartIndicatorTextView;
     private EditText searchEditText;
-    private Button searchButton;
     private ProductAdapter productAdapter;
     private List<Product> productList;
     private FirebaseFirestore db;
@@ -41,10 +39,10 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_browse_products);
 
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         cartIndicatorTextView = findViewById(R.id.cartIndicator);
         searchEditText = findViewById(R.id.searchEditText);
-        searchButton = findViewById(R.id.searchButton);
+        Button searchButton = findViewById(R.id.searchButton);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2)); // 2 columns
         recyclerView.setVerticalScrollBarEnabled(false); // Hide vertical scrollbar
 
@@ -228,7 +226,7 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
         }
 
         // Update the cart indicator text with the count of selected products
-        cartIndicatorTextView.setText("Cart: " + selectedProductCount);
+        cartIndicatorTextView.setText(getString(R.string.cart_label, selectedProductCount));
     }
 
     private double calculateTotalCost(ArrayList<String> selectedItems) {

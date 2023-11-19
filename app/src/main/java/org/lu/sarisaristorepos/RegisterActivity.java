@@ -1,6 +1,5 @@
 package org.lu.sarisaristorepos;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -9,10 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -39,24 +37,21 @@ public class RegisterActivity extends AppCompatActivity {
 
             // Check if the email is empty or not in a valid format
             if (user.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(user).matches()) {
-                Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.email_empty_message, Toast.LENGTH_SHORT).show();
             } else if (password.isEmpty() || cpassword.isEmpty()) {
-                Toast.makeText(this, "Please fill in both password fields", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.password_empty_message, Toast.LENGTH_SHORT).show();
             } else if (!password.equals(cpassword)) {
-                Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.password_diff_message, Toast.LENGTH_SHORT).show();
             } else if (password.length() < 8) {
-                Toast.makeText(this, "Password must be at least 8 characters long", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.password_rule, Toast.LENGTH_SHORT).show();
             } else {
                 auth.createUserWithEmailAndPassword(user, password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                if (task.isSuccessful()) {
-                                    Toast.makeText(RegisterActivity.this, "Sign-Up Successfully", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                                } else {
-                                    Toast.makeText(RegisterActivity.this, "Sign-Up Failed: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                }
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Toast.makeText(RegisterActivity.this, R.string.register_okay, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                            } else {
+                                Toast.makeText(RegisterActivity.this, R.string.register_fail + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
             }

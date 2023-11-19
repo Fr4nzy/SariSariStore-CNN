@@ -4,11 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class PurchasedActivity extends AppCompatActivity {
 
@@ -27,12 +27,12 @@ public class PurchasedActivity extends AppCompatActivity {
 
         // Format the selected items as a string
         StringBuilder itemsText = new StringBuilder();
-        for (String item : selectedItems) {
+        for (String item : Objects.requireNonNull(selectedItems)) {
             itemsText.append(item).append("\n");
         }
 
         purchasedItems.setText(itemsText.toString());
-        totalCostPurchased.setText("Total Cost: ₱" + String.format("%.2f", totalCost));
+        totalCostPurchased.setText(getString(R.string.total_cost_label, totalCost));
 
         // Handle cash payment when the "Cash" button is clicked
         Button cashButton = findViewById(R.id.btnCash);

@@ -7,4 +7,28 @@
         <item>Instant Noodles</item>
         <item>Others</item>
     </string-array>
+
+    <string name="total_cost_label">Total Cost: ₱%.2f</string>
+    <string name="delete_confirmation_title">Delete Confirmation</string>
+    <string name="delete_confirmation_message">Are you sure you want to delete the selected items?</string>
+    <string name="cart_label">Cart: %d</string>
+    <string name="fields_empty_message">Fields can\'t be empty</string>
+    <string name="email_empty_message">Email Field can\'t be empty</string>
+    <string name="password_empty_message">Passwords Field can\'t be empty</string>
+    <string name="password_diff_message">Password do not match</string>
+    <string name="password_rule">Password must be at least 8 characters long</string>
+    <string name="select_image_message">Please select an image</string>
+    <string name="fail_insertion_message">Fail Insertion</string>
+    <string name="transaction_confirmed_message">Transaction confirmed!</string>
+    <string name="error_storing_transaction_message">Error storing transaction. Please try again.</string>
+    <string name="insufficient_funds_message">Insufficient funds. Please enter a valid amount.</string>
+    <string name="no_items_selected_message">Please select items to delete</string>
+    <string name="total_products_label">Total Products: %d</string>
+    <string name="total_transactions_label">Total Transactions: %d</string>
+    <string name="login_success_message">Login Successfully</string>
+    <string name="login_failed_message">Login Failed: </string>
+    <string name="register_okay">Sign-up Successfully</string>
+    <string name="register_fail">Sign-up Failed</string>
+
+
 </resources>

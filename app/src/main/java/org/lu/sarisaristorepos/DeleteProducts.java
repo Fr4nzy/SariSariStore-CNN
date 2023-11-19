@@ -18,20 +18,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DeleteProducts extends AppCompatActivity implements ProductAdapter.ProductSelectionListener {
 
     private TextView selectionIndicatorTextView;
+    private Spinner categorySpinner;
     private ProductAdapter productAdapter;
     private List<Product> productList;
     private FirebaseFirestore db;
@@ -67,7 +65,7 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
 
         // Get the selected category from the Spinner
         // Apply the adapter to the spinner
-        Spinner categorySpinner = findViewById(R.id.categorySpinner);
+        categorySpinner = findViewById(R.id.categorySpinner);
         categorySpinner.setAdapter(adapter);
 
         db = FirebaseFirestore.getInstance();
@@ -127,9 +125,6 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         // List of collections to load products from
         String[] allCollections = {"Canned Goods", "Condiments", "Powdered Beverages", "Instant Noodles", "Others"};
 
-        // Counter to track the number of collections loaded
-        AtomicInteger collectionsLoaded = new AtomicInteger();
-
         // Create a list to store all tasks
         List<Task<QuerySnapshot>> tasks = new ArrayList<>();
 
@@ -163,7 +158,6 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
             // Notify the adapter after all collections have been processed
             productAdapter.notifyDataSetChanged();
         });
-
     }
 
     @Override
@@ -177,11 +171,11 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         // Check if there are selected items before showing the dialog
         if (!selectedItems.isEmpty()) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Delete Confirmation");
-            builder.setMessage("Are you sure you want to delete the selected items?");
+            builder.setTitle(getString(R.string.delete_confirmation_title));
+            builder.setMessage(getString(R.string.delete_confirmation_message));
             builder.setPositiveButton("Yes", (dialog, which) -> {
-                // User confirmed deletion, call deleteSelectedProducts()
-                deleteSelectedProducts();
+                // User confirmed deletion, proceed with deletion process
+                deleteSelectedItems();
             });
             builder.setNegativeButton("No", (dialog, which) -> {
                 // User canceled, do nothing
@@ -195,50 +189,32 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         }
     }
 
+    // Function to delete selected items and their associated images
+    private void deleteSelectedItems() {
+        // Iterate through selected items and delete them from Firestore and Storage
+        for (Product product : productList) {
+            if (product.isSelected()) {
+                // Delete from Firestore
+                db.collection(product.getCategory()).document(product.getId()).delete()
+                        .addOnSuccessListener(aVoid -> {
+                            // Firestore document deleted successfully
 
-    private void deleteSelectedProducts() {
-        if (!selectedItems.isEmpty()) {
-            // Create a batch to delete selected products in a single transaction
-            WriteBatch batch = db.batch();
-
-            for (String selectedItem : selectedItems) {
-                // Split the selected item string to get the product ID
-                String[] parts = selectedItem.split(" - ");
-                if (parts.length == 2) {
-                    String productName = parts[0].trim();
-                    String productPrice = parts[1].trim();
-
-                    // Find the product with matching name and price
-                    for (Product product : productList) {
-                        if (product.getName().equals(productName) && product.getPrice().equals(productPrice)) {
-                            // Delete the product from Firestore
-                            DocumentReference productRef = db.collection(product.getCategory()).document(product.getId());
-                            batch.delete(productRef);
-
-                            // Delete the image from Firebase Storage
+                            // Delete associated image from Storage
                             deleteImageFromStorage(product.getImageURL());
-
-                            break; // Stop searching after deletion
-                        }
-                    }
-                }
+                        })
+                        .addOnFailureListener(e -> {
+                            // Handle Firestore deletion failure
+                            Log.e("DeleteProducts", "Error deleting Firestore document: " + e.getMessage());
+                        });
             }
-
-            // Commit the batch to Firestore
-            batch.commit().addOnSuccessListener(aVoid -> {
-                // Deletion successful
-                productAdapter.notifyDataSetChanged(); // Update the UI
-
-                // Clear the selected items list
-                selectedItems.clear();
-
-                // Update the selection indicator after the deletion process is complete
-                updateSelectionIndicator();
-            }).addOnFailureListener(e -> {
-                // Handle the error
-                // You may want to implement error handling based on your requirements
-            });
         }
+
+        // Clear the selected items list
+        selectedItems.clear();
+
+        // Update the selection indicator and refresh the product list
+        updateSelectionIndicator();
+        loadProducts(categorySpinner.getSelectedItem().toString());
     }
 
     // Function to delete the image from Firebase Storage
@@ -247,24 +223,24 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
         StorageReference imageRef = FirebaseStorage.getInstance().getReferenceFromUrl(imageURL);
 
         // Delete the image
-        imageRef.delete().addOnSuccessListener(aVoid -> {
-            // Image deleted successfully
-        }).addOnFailureListener(exception -> {
-            // Handle any errors that may occur
-            // For example, log the error
-            Log.e("DeleteProducts", "Error deleting image: " + exception.getMessage());
-        });
+        imageRef.delete()
+                .addOnSuccessListener(aVoid -> {
+                    // Image deleted successfully
+                    Log.i("DeleteProducts", "Image deleted successfully");
+                })
+                .addOnFailureListener(exception -> {
+                    // Handle any errors that may occur
+                    // For example, log the error
+                    Log.e("DeleteProducts", "Error deleting image: " + exception.getMessage());
+                });
     }
 
     public void updateSelectionIndicator() {
-        double totalCost = 0.0;
-
         int selectedProductCount = 0; // Track the count of selected products
 
         for (Product product : productList) {
             if (product.isSelected()) {
                 selectedItems.add(product.getName() + " - " + product.getPrice());
-                totalCost += Double.parseDouble(product.getPrice());
                 selectedProductCount++;
             }
         }
@@ -277,5 +253,4 @@ public class DeleteProducts extends AppCompatActivity implements ProductAdapter.
             selectionIndicatorTextView.setText("Cart: " + selectedProductCount);
         }
     }
-
 }

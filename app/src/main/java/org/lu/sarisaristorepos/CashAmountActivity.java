@@ -1,23 +1,24 @@
 package org.lu.sarisaristorepos;
 
+import static java.lang.String.format;
+
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -41,30 +42,27 @@ public class CashAmountActivity extends AppCompatActivity {
         Button finalizeButton = findViewById(R.id.finalizeButton);
 
         // Display the total cost
-        totalCostTextView.setText("Total Cost: ₱" + String.format("%.2f", totalCost));
+        totalCostTextView.setText(getString(R.string.total_cost_label, totalCost));
 
         // Handle the finalization of the transaction
-        finalizeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get the cash amount entered by the user
-                String cashAmountStr = cashAmountEditText.getText().toString();
-                if (!cashAmountStr.isEmpty()) {
-                    double cashAmount = Double.parseDouble(cashAmountStr);
-                    double change = cashAmount - totalCost;
+        finalizeButton.setOnClickListener(v -> {
+            // Get the cash amount entered by the user
+            String cashAmountStr = cashAmountEditText.getText().toString();
+            if (!cashAmountStr.isEmpty()) {
+                double cashAmount = Double.parseDouble(cashAmountStr);
+                double change = cashAmount - totalCost;
 
-                    if (change >= 0) {
-                        // The transaction is successful
-                        storeTransaction(totalCost, cashAmount, change);
-                    } else {
-                        // Handle insufficient funds
-                        Toast.makeText(CashAmountActivity.this, "Insufficient funds. Please enter a valid amount.", Toast.LENGTH_SHORT).show();
-                    }
+                if (change >= 0) {
+                    // The transaction is successful
+                    storeTransaction(totalCost, cashAmount, change);
                 } else {
-                    // Handle the case where no cash amount is entered
-                    // You might want to show an error message
-                    Toast.makeText(CashAmountActivity.this, "Please enter the cash amount.", Toast.LENGTH_SHORT).show();
+                    // Handle insufficient funds
+                    Toast.makeText(CashAmountActivity.this, R.string.insufficient_funds_message, Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                // Handle the case where no cash amount is entered
+                // You might want to show an error message
+                Toast.makeText(CashAmountActivity.this, R.string.error_storing_transaction_message, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -73,13 +71,13 @@ public class CashAmountActivity extends AppCompatActivity {
         // Generate a unique transaction ID
         String transactionId = generateTransactionId();
 
-        // Get the current date and time
-        String currentDate = getCurrentDate();
+        // Get the current date and time as a Timestamp
+        com.google.firebase.Timestamp currentDateTimestamp = getCurrentTimestamp();
 
         // Create a map to store transaction details
         Map<String, Object> transactionData = new HashMap<>();
         transactionData.put("transactionId", transactionId);
-        transactionData.put("date", currentDate);
+        transactionData.put("date", currentDateTimestamp); // Store as a Timestamp
         transactionData.put("totalCost", totalCost);
         transactionData.put("cashAmount", cashAmount);
         transactionData.put("change", change);
@@ -89,7 +87,7 @@ public class CashAmountActivity extends AppCompatActivity {
                 .set(transactionData)
                 .addOnSuccessListener(aVoid -> {
                     // Transaction stored successfully, now show the receipt dialog
-                    showReceiptDialog(transactionId, currentDate, totalCost, cashAmount, change);
+                    showReceiptDialog(transactionId, currentDateTimestamp.toDate(), totalCost, cashAmount, change);
                 })
                 .addOnFailureListener(e -> {
                     // Handle the failure to store the transaction
@@ -97,7 +95,7 @@ public class CashAmountActivity extends AppCompatActivity {
                 });
     }
 
-    private void showReceiptDialog(String transactionId, String currentDate, double totalCost, double cashAmount, double change) {
+    private void showReceiptDialog(String transactionId, Date currentDate, double totalCost, double cashAmount, double change) {
         // Create a custom dialog
         Dialog receiptDialog = new Dialog(this);
         receiptDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -109,43 +107,45 @@ public class CashAmountActivity extends AppCompatActivity {
         Button confirmDialogButton = receiptDialog.findViewById(R.id.confirmDialogButton);
 
         // Set receipt details
-        String receiptMessage = "Transaction ID: " + transactionId + "\n\n" +
-                "Date: " + currentDate + "\n\n" +
-                "Total Cost: ₱" + String.format("%.2f", totalCost) + "\n\n" +
-                "Cash Amount: ₱" + String.format("%.2f", cashAmount) + "\n\n" +
-                "Change: ₱" + String.format("%.2f", change);
+        String receiptMessage = String.format("Transaction ID: %s\n\nDate: %s\n\nTotal Cost: ₱%s\n\nCash Amount: ₱%s\n\nChange: ₱%s", transactionId, formatDate(currentDate), format("%.2f", totalCost), format("%.2f", cashAmount), format("%.2f", change));
 
         receiptTextView.setText(receiptMessage);
 
         // Set a listener for the close button
-        closeDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close the dialog
-                receiptDialog.dismiss();
+        closeDialogButton.setOnClickListener(v -> {
+            // Close the dialog
+            receiptDialog.dismiss();
 
-                // Return to the previous activity
-                Intent intent = new Intent(CashAmountActivity.this, PurchasedActivity.class);
-                startActivity(intent);
-            }
+            // Return to the previous activity
+            Intent intent = new Intent(CashAmountActivity.this, PurchasedActivity.class);
+            startActivity(intent);
         });
 
         // Set a listener for the confirm button
-        confirmDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Close the dialog
-                receiptDialog.dismiss();
-                BrowseProducts();
-                finish();
-                // Show a confirmation message or perform additional actions if needed
-                Toast.makeText(CashAmountActivity.this, "Transaction confirmed!", Toast.LENGTH_SHORT).show();
-            }
+        confirmDialogButton.setOnClickListener(v -> {
+            // Close the dialog
+            receiptDialog.dismiss();
+            BrowseProducts();
+            finish();
+            // Show a confirmation message or perform additional actions if needed
+            Toast.makeText(CashAmountActivity.this, "Transaction confirmed!", Toast.LENGTH_SHORT).show();
         });
 
         // Show the dialog
         receiptDialog.show();
     }
+
+    private com.google.firebase.Timestamp getCurrentTimestamp() {
+        // Get the current date and time as a Timestamp
+        return com.google.firebase.Timestamp.now();
+    }
+
+    private String formatDate(Date date) {
+        // Format the date as a string with the default locale
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return dateFormat.format(date);
+    }
+
 
     private String generateTransactionId() {
         // Use a combination of timestamp and a UUID to create a unique transaction ID
@@ -154,13 +154,6 @@ public class CashAmountActivity extends AppCompatActivity {
 
         // Concatenate the timestamp and UUID, and return as the transaction ID
         return timeStamp + "_" + uuid;
-    }
-
-    private String getCurrentDate() {
-        // Get the current date and time
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return dateFormat.format(calendar.getTime());
     }
 
     private void BrowseProducts(){
