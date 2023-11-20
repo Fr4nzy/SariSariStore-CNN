@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -13,6 +14,7 @@ public class LoginActivity extends AppCompatActivity {
     FirebaseAuth auth;
     EditText editUserTextName, getEditUserTextPassword;
     Button btnLogin, btnRegister;
+    TextView forgotPasswordBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +26,13 @@ public class LoginActivity extends AppCompatActivity {
         getEditUserTextPassword = findViewById(R.id.editPasswordTxt);
         btnLogin = findViewById(R.id.loginBtn);
         btnRegister = findViewById(R.id.registerBtn);
+        forgotPasswordBtn = findViewById(R.id.forgotPasswordBtn);
 
         btnLogin.setOnClickListener(v -> Login());
 
         btnRegister.setOnClickListener(v -> Register());
+
+        forgotPasswordBtn.setOnClickListener(v -> {ForgotPassword(); });
 
     }
 
@@ -42,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
                         .addOnSuccessListener(authResult -> {
                             Toast.makeText(LoginActivity.this, R.string.login_success_message, Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                            finish();
                         }).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, R.string.login_failed_message + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         } else if (email.isEmpty()) {
@@ -56,9 +60,15 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    //This method redirects to the Register Activity
+    //The Register Activity
     public  void Register() {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+        startActivity(intent);
+    }
+
+    //Forgot Password Activity
+    public void ForgotPassword() {
+        Intent intent = new Intent(LoginActivity.this, ForgotPassword.class);
         startActivity(intent);
     }
 

@@ -41,6 +41,7 @@ public class PurchasedActivity extends AppCompatActivity {
             Intent intent = new Intent(PurchasedActivity.this, CashAmountActivity.class);
             intent.putExtra("totalCost", totalCost);
             startActivity(intent);
+            finish();
         });
     }
 

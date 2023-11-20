@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="email_address">Email Address</string>
+    <string name="recover_account">Recover Account</string>
+    <string name="timer">Timer</string>
+    <string name="submit">Submit</string>
+    <string name="log_in_lbl">Log-In</string>
+    <string name="username_et">Username</string>
+    <string name="login_password_et">Password</string>
+    <string name="login_to_register_btn">Register</string>
+    <string name="login_forgot_password">Forgot Password?</string>
+    <string name="recovery_code_hint">Ex. 12345678</string>
+    <string name="send_confirmation_email">Send</string>
+    <string name="recovery_email_sent">Recovery Code Sent</string>
+    <string name="user_not_found">User not found</string>
+    <string name="recent_login_required">Recent Login Required</string>
+    <string name="recovery_email_failed">Failed to send the recovery code</string>
+    <string name="enter_email">Please Enter you Email Address</string>
+    <string name="timer_expired">Code is Expired</string>
+    <string name="invalid_recovery_code">Code Invalid</string>
+</resources>

@@ -50,6 +50,7 @@ public class RegisterActivity extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 Toast.makeText(RegisterActivity.this, R.string.register_okay, Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                                finish();
                             } else {
                                 Toast.makeText(RegisterActivity.this, R.string.register_fail + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -60,6 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
         backBtn.setOnClickListener(v -> {
             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
             startActivity(intent);
+            finish();
         });
     }
 }

@@ -17,7 +17,10 @@ public class PointOfSaleActivity extends AppCompatActivity {
 
         browseProducts = findViewById(R.id.browseProducts);
 
-        browseProducts.setOnClickListener(view -> BrowseProducts());
+        browseProducts.setOnClickListener(view -> {
+            BrowseProducts();
+            finish();
+        });
     }
 
     private void BrowseProducts(){

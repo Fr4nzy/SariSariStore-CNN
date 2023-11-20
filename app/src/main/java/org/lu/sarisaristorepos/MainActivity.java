@@ -19,8 +19,12 @@ public class MainActivity extends AppCompatActivity {
         productInsertDeleteReview = findViewById(R.id.productsBtn);
         logout = findViewById(R.id.logoutBtn);
 
-        pos.setOnClickListener(v -> PointOfSale());
-        productInsertDeleteReview.setOnClickListener(view -> InsertDeleteReview());
+        pos.setOnClickListener(v -> {
+            PointOfSale();
+        });
+        productInsertDeleteReview.setOnClickListener(view -> {
+            InsertDeleteReview();
+        });
 
         logout.setOnClickListener(v -> logout());
 
