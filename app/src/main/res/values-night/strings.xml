@@ -18,4 +18,11 @@
     <string name="enter_email">Please Enter you Email Address</string>
     <string name="timer_expired">Code is Expired</string>
     <string name="invalid_recovery_code">Code Invalid</string>
+    <string name="total_canned_goods">Total Canned Goods</string>
+    <string name="total_condiments">Total Condiments</string>
+    <string name="powdered_beverages">Powdered Beverages</string>
+    <string name="others">Others</string>
+    <string name="total_transactions">Total Transactions</string>
+    <string name="product_stock_lbl">Product Stock</string>
+    <string name="total_transactions_lbl">Total Transactions</string>
 </resources>

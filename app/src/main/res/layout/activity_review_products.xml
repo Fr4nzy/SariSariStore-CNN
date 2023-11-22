@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ReviewProducts">
+    tools:context=".ReviewProducts"
+    tools:layout_editor_absoluteX="-40dp"
+    tools:layout_editor_absoluteY="0dp">
 
     <TextView
         android:id="@+id/totalProducts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="144dp"
+        android:layout_marginStart="104dp"
         android:layout_marginTop="40dp"
-        android:hint="Total Products"
+        android:hint="@string/total_products_label"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tpLabel" />
@@ -21,32 +23,94 @@
         android:id="@+id/totalTransactions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="128dp"
+        android:layout_marginStart="125dp"
         android:layout_marginTop="40dp"
-        android:hint="Total Transactions"
+        android:hint="@string/total_transactions_lbl"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ttLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/timePeriodSpinner" />
 
     <TextView
         android:id="@+id/tpLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="128dp"
-        android:layout_marginTop="132dp"
-        android:text="Product Stock"
+        android:layout_marginTop="60dp"
+        android:text="@string/product_stock_lbl"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/totalTransactions" />
 
     <TextView
         android:id="@+id/ttLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
-        android:layout_marginTop="55dp"
-        android:text="Total Transactions"
+        android:layout_marginTop="120dp"
+        android:text="@string/total_transactions"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/totalProductsCannedGoods"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/total_canned_goods"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/totalProducts" />
+
+    <TextView
+        android:id="@+id/totalProductsCondiments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/total_condiments"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalProductsCannedGoods" />
+
+    <TextView
+        android:id="@+id/totalProductsInstantNoodles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/instant_noodles"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalProductsCondiments" />
+
+    <TextView
+        android:id="@+id/totalProductsPowderedBeverages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/powdered_beverages"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalProductsInstantNoodles" />
+
+    <TextView
+        android:id="@+id/totalProductsOthers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="12dp"
+        android:hint="@string/others"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalProductsPowderedBeverages" />
+
+    <Spinner
+        android:id="@+id/timePeriodSpinner"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="40dp"
+        android:textAlignment="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ttLabel"
+        tools:ignore="TouchTargetSizeCheck" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
