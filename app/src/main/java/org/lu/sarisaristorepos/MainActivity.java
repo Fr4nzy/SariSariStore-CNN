@@ -1,7 +1,9 @@
 package org.lu.sarisaristorepos;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -13,6 +15,7 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         predict.setOnClickListener(view -> fetchAndDisplayData());
         logout.setOnClickListener(v -> logout());
 
+        // After initializing the LineChart, log the chart reference
+        Log.d("ChartReference", "LineChart: " + lineChart);
 
     }
 
@@ -59,52 +64,68 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchAndDisplayData() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("transactions")
-                .document("yourDocId") // replace with your actual document ID
+
+        // Query the "predictions" collection without ordering or limiting
+        db.collection("predictions")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document != null && document.exists()) {
+                        QuerySnapshot querySnapshot = task.getResult();
+                        if (querySnapshot != null && !querySnapshot.isEmpty()) {
+                            // Retrieve the first document (assuming predictions are already in the desired order)
+                            DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+
                             List<Map<String, Object>> predictions = (List<Map<String, Object>>) document.get("predictions");
-                            if (predictions != null){
+                            if (predictions != null) {
+                                Log.d("FirestoreData", "Predictions Data: " + predictions);
+
                                 // Convert predictions to data entries
                                 List<Entry> entries = new ArrayList<>();
                                 for (int i = 0; i < predictions.size(); i++) {
                                     Map<String, Object> prediction = predictions.get(i);
-                                    float predictionValue = Float.parseFloat(prediction.get("prediction").toString());
+                                    float predictionValue = Float.parseFloat(((List<?>) prediction.get("prediction")).get(0).toString());
                                     entries.add(new Entry(i, predictionValue));
                                 }
 
-                                // Create a LineChart
-                                LineChart lineChart = findViewById(R.id.lineChart);
+                                // Customize chart appearance if needed
 
                                 // Create a LineDataSet from the entries
-                                LineDataSet dataSet = new LineDataSet(entries, "Label"); // You can set a label for your data
+                                LineDataSet dataSet = new LineDataSet(entries, "Total Cost"); // Set label to "Total Cost"
+                                dataSet.setValueTextColor(Color.WHITE); // Set text color to white
+                                dataSet.setValueTextSize(12f); // Set text size
+
+                                // Set x-axis and y-axis text color
+                                lineChart.getXAxis().setTextColor(Color.WHITE);
+                                lineChart.getAxisLeft().setTextColor(Color.WHITE);
+                                lineChart.getAxisRight().setTextColor(Color.WHITE);
+
+                                // Set legend label color
+                                lineChart.getLegend().setTextColor(Color.WHITE);
+
+                                // Set description
+                                lineChart.getDescription().setText("Predicted Sales");
+                                lineChart.getDescription().setTextColor(Color.WHITE);
+
                                 LineData lineData = new LineData(dataSet);
 
                                 // Set the data to the chart
                                 lineChart.setData(lineData);
 
-                                // Customize chart appearance if needed
-                                // ...
-
                                 // Refresh the chart
                                 lineChart.invalidate();
-
                             } else {
                                 // Handle the case when predictions is null
                                 Toast.makeText(MainActivity.this, "Predictions data is null", Toast.LENGTH_SHORT).show();
                             }
-
                         } else {
-                            Toast.makeText(MainActivity.this, "Document does not exist", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, "No documents found in the 'predictions' collection", Toast.LENGTH_SHORT).show();
                         }
                     } else {
                         Toast.makeText(MainActivity.this, "Failed to fetch data", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
 
 
 }
