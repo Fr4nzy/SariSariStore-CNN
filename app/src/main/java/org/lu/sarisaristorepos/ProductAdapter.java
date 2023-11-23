@@ -6,21 +6,21 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
-import android.widget.CompoundButton;
-import android.widget.CheckBox;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     private List<Product> productList;
-    private ProductSelectionListener productSelectionListener;
+    private final ProductSelectionListener productSelectionListener;
 
     // Modify the constructor to accept an optional listener
     public ProductAdapter(List<Product> productList, ProductSelectionListener listener) {

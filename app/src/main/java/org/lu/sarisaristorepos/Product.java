@@ -1,8 +1,12 @@
 package org.lu.sarisaristorepos;
 
 public class Product {
-    private String id, name, imageURL,brand, category;
-    private String price;
+    private final String id;
+    private final String name;
+    private final String imageURL;
+    private final String brand;
+    private final String category;
+    private final String price;
     private boolean selected;  // Add selected property
 
     public Product(String id, String name, String price, String imageURL, String brand, String category) {
