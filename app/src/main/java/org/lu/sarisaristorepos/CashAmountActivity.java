@@ -74,10 +74,13 @@ public class CashAmountActivity extends AppCompatActivity {
         // Get the current date and time as a Timestamp
         com.google.firebase.Timestamp currentDateTimestamp = getCurrentTimestamp();
 
+        // Convert the Timestamp to a string format suitable for the ARIMA model
+        String formattedDate = formatDateForARIMA(currentDateTimestamp.toDate());
+
         // Create a map to store transaction details
         Map<String, Object> transactionData = new HashMap<>();
         transactionData.put("transactionId", transactionId);
-        transactionData.put("date", currentDateTimestamp); // Store as a Timestamp
+        transactionData.put("date", formattedDate); // Store as a string
         transactionData.put("totalCost", totalCost);
         transactionData.put("cashAmount", cashAmount);
         transactionData.put("change", change);
@@ -94,6 +97,14 @@ public class CashAmountActivity extends AppCompatActivity {
                     Toast.makeText(CashAmountActivity.this, "Error storing transaction. Please try again.", Toast.LENGTH_SHORT).show();
                 });
     }
+
+    // Add this method to convert the date to a string format suitable for the ARIMA model
+    private String formatDateForARIMA(Date date) {
+        // Format the date as a string with the format expected by the ARIMA model
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        return dateFormat.format(date);
+    }
+
 
     private void showReceiptDialog(String transactionId, Date currentDate, double totalCost, double cashAmount, double change) {
         // Create a custom dialog
@@ -142,7 +153,7 @@ public class CashAmountActivity extends AppCompatActivity {
 
     private String formatDate(Date date) {
         // Format the date as a string with the default locale
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         return dateFormat.format(date);
     }
 
