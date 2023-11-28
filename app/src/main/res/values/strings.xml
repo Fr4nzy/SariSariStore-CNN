@@ -70,6 +70,15 @@
     <string name="total_transactions_lbl">Total Transactions</string>
     <string name="category_count_label">%s: %d</string>
     <string name="days">Days</string>
+    <string name="product_name">Product Name</string>
+    <string name="add_products">Add Products</string>
+    <string name="item_name">Item Name</string>
+    <string name="item_brand">Item Brand</string>
+    <string name="item_price">Item Price</string>
+    <string name="select_image">Select Image</string>
+    <string name="camera">Camera</string>
+    <string name="todo">TODO</string>
+    <string name="_0">0%</string>
 
 
 </resources>

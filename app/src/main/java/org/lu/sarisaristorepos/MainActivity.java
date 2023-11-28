@@ -1,11 +1,13 @@
 package org.lu.sarisaristorepos;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,9 +30,10 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
+    Button pos, productInsertDeleteReview, logout;
+
     private static final String TAG = "MainActivity";
     private LineChart lineChart;
-    private Spinner periodSpinner;
     private ArrayList<Entry> entries; // Store original entries for reset
     private int selectedPeriod = 1; // Set a default value for selectedPeriod
     private boolean dataFetched = false; // Flag to track whether data has been fetched
@@ -41,7 +44,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         lineChart = findViewById(R.id.lineChart);
-        periodSpinner = findViewById(R.id.periodSpinner);
+        Spinner periodSpinner = findViewById(R.id.periodSpinner);
+        pos = findViewById(R.id.posBtn);
+        productInsertDeleteReview = findViewById(R.id.productsBtn);
+        logout = findViewById(R.id.logoutBtn);
+
+        pos.setOnClickListener(v -> PointOfSale());
+        productInsertDeleteReview.setOnClickListener(view -> InsertDeleteReview());
+        logout.setOnClickListener(v -> logout());
+
 
         // Fetch data from Firestore and perform SMA analysis
         fetchDataFromFirestore();
@@ -68,6 +79,21 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void PointOfSale() {
+        Intent intent = new Intent(this, PointOfSaleActivity.class);
+        startActivity(intent);
+    }
+
+    private void InsertDeleteReview() {
+        Intent intent = new Intent(this, InsertDeleteReview.class);
+        startActivity(intent);
+    }
+
+    private void logout() {
+        // Finish all activities in the back stack
+        finishAffinity();
+    }
+
     private void fetchDataFromFirestore() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("transactions")
@@ -81,11 +107,15 @@ public class MainActivity extends AppCompatActivity {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String dateString = document.getString("Date");
                             Date date = parseDateString(dateString);
-                            if (date != null) {
-                                double totalCost = document.getDouble("Sales");
+
+                            // Check if "Sales" field is not null
+                            Double salesValue = document.getDouble("Sales");
+                            if (date != null && salesValue != null) {
+                                double totalCost = salesValue;
                                 entries.add(new Entry(date.getTime(), (float) totalCost));
                             }
                         }
+
 
                         // Store original entries for reset
                         MainActivity.this.entries = new ArrayList<>(entries);
@@ -213,6 +243,11 @@ public class MainActivity extends AppCompatActivity {
         lineChart.invalidate();
     }
 
+    public boolean isDataFetched() {
+        return dataFetched;
+    }
 
-
+    public void setDataFetched(boolean dataFetched) {
+        this.dataFetched = dataFetched;
+    }
 }

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
-        android:text="Add Products"
+        android:text="@string/add_products"
         android:textSize="25sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -24,10 +24,11 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Item Name"
+        android:hint="@string/item_name"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/LabelManageActivity" />
+        app:layout_constraintTop_toBottomOf="@+id/LabelManageActivity"
+        android:autofillHints="Product Name" />
 
     <EditText
         android:id="@+id/productBrand"
@@ -36,10 +37,11 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Item Brand"
+        android:hint="@string/item_brand"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productPrice" />
+        app:layout_constraintTop_toBottomOf="@+id/productPrice"
+        android:autofillHints="Product Brand" />
 
     <EditText
         android:id="@+id/productPrice"
@@ -48,10 +50,11 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:hint="Item Price"
+        android:hint="@string/item_price"
         android:inputType="numberSigned"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/productName" />
+        app:layout_constraintTop_toBottomOf="@+id/productName"
+        android:autofillHints="Item Price" />
 
     <Spinner
         android:id="@+id/categorySelect"
@@ -70,15 +73,28 @@
         android:layout_marginTop="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/categorySelect"
-        app:srcCompat="@drawable/baseline_image_24" />
+        app:srcCompat="@drawable/baseline_image_24"
+        android:contentDescription="@string/todo" />
 
     <Button
         android:id="@+id/btnImgSelect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="120dp"
-        android:text="Select Image"
+        android:layout_marginTop="160dp"
+        android:text="@string/select_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/previewImg"
+        app:layout_constraintTop_toBottomOf="@+id/categorySelect" />
+
+    <Button
+        android:id="@+id/btnImgCapture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="220dp"
+        android:text="@string/camera"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/previewImg"
@@ -90,8 +106,39 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="88dp"
         android:layout_marginTop="48dp"
-        android:text="Submit"
+        android:text="@string/submit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/previewImg" />
+
+    <TextView
+        android:id="@+id/classifyLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="438dp"
+        android:layout_marginEnd="45dp"
+        android:text="@string/product_name"
+        android:textSize="12sp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/previewImg"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/percentLbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="33dp"
+        android:text="@string/_0"
+        android:textSize="20sp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/btnImgSelect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.492"
+        app:layout_constraintStart_toEndOf="@+id/previewImg"
+        app:layout_constraintTop_toBottomOf="@+id/classifyLbl"
+        app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
