@@ -75,7 +75,7 @@ public class CashAmountActivity extends AppCompatActivity {
         com.google.firebase.Timestamp currentDateTimestamp = getCurrentTimestamp();
 
         // Convert the Timestamp to a string format suitable for the ARIMA model
-        String formattedDate = formatDateForARIMA(currentDateTimestamp.toDate());
+        String formattedDate = formatDateForFirestore(currentDateTimestamp.toDate());
 
         // Create a map to store transaction details
         Map<String, Object> transactionData = new HashMap<>();
@@ -98,10 +98,10 @@ public class CashAmountActivity extends AppCompatActivity {
                 });
     }
 
-    // Add this method to convert the date to a string format suitable for the ARIMA model
-    private String formatDateForARIMA(Date date) {
-        // Format the date as a string with the format expected by the ARIMA model
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+    // Add this method to convert the date to a string format suitable for storage in Firestore
+    private String formatDateForFirestore(Date date) {
+        // Format the date as a string with the desired format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return dateFormat.format(date);
     }
 
