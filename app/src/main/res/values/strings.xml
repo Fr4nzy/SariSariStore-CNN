@@ -13,6 +13,13 @@
         <item>This Week</item>
     </string-array>
 
+    <string-array name="period_options">
+        <item>7</item>
+        <item>14</item>
+        <item>21</item>
+        <item>28</item>
+    </string-array>
+
     <string name="total_cost_label">Total Cost: ₱%.2f</string>
     <string name="delete_confirmation_title">Delete Confirmation</string>
     <string name="delete_confirmation_message">Are you sure you want to delete the selected items?</string>
@@ -62,6 +69,7 @@
     <string name="product_stock_lbl">Product Stock</string>
     <string name="total_transactions_lbl">Total Transactions</string>
     <string name="category_count_label">%s: %d</string>
+    <string name="days">Days</string>
 
 
 </resources>

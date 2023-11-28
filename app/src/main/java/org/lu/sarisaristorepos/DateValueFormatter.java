@@ -13,7 +13,12 @@ public class DateValueFormatter extends ValueFormatter {
 
     @Override
     public String getAxisLabel(float value, AxisBase axis) {
-        // Convert the float value to a Date and format it
-        return dateFormat.format(new Date((long) value));
+        // Convert the float value to a Date
+        Date date = new Date((long) value);
+
+        // Format the date as a string
+        String dateString = dateFormat.format(date);
+
+        return dateString;
     }
 }
