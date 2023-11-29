@@ -35,4 +35,8 @@
     <string name="camera">Camera</string>
     <string name="todo">TODO</string>
     <string name="_0">0%</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="point_of_sale">Point of Sale</string>
+    <string name="manage_products">Manage Products</string>
+    <string name="log_out">Quit</string>
 </resources>
