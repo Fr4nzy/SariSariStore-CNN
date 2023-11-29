@@ -1,11 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
+
     <style name="Base.Theme.SariSariStorePOS" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
 
         <!-- Add this line to enforce "Not-Night Mode" -->
+        <item name="android:forceDarkAllowed">false</item>
     </style>
-
-    <style name="Theme.SariSariStorePOS" parent="Base.Theme.SariSariStorePOS" />
 </resources>

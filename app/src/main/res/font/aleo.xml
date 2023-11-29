@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:fontProviderAuthority="com.google.android.gms.fonts"
         app:fontProviderPackage="com.google.android.gms"
-        app:fontProviderQuery="ALEO"
+        app:fontProviderQuery="Aleo"
         app:fontProviderCerts="@array/com_google_android_gms_fonts_certs"
     tools:ignore="FontValidation">
 </font-family>

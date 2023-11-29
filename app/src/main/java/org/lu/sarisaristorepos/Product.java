@@ -8,6 +8,7 @@ public class Product {
     private final String category;
     private final String price;
     private boolean selected;  // Add selected property
+    private int quantity;
 
     public Product(String id, String name, String price, String imageURL, String brand, String category) {
         this.id = id; // Initialize the Firestore document ID
@@ -17,6 +18,7 @@ public class Product {
         this.imageURL = imageURL;
         this.category = category;
         this.selected = false;
+        this.quantity = 0;
     }
 
     public String getId() {
@@ -50,4 +52,11 @@ public class Product {
         this.selected = selected;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
 }

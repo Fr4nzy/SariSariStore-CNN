@@ -44,6 +44,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         holder.productPrice.setText(product.getPrice());
         holder.productCategory.setText(product.getCategory());
         holder.productBrand.setText(product.getBrand());
+        holder.productQuantity.setText("Quantity: " + product.getQuantity());
 
 
         // Load the product image using Glide
@@ -88,6 +89,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         TextView productPrice;
         TextView productCategory;
         TextView productBrand;
+        TextView productQuantity;
 
 
         ViewHolder(@NonNull View itemView) {
@@ -97,6 +99,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             productPrice = itemView.findViewById(R.id.productPrice);
             productCategory = itemView.findViewById(R.id.categoryInfo);
             productBrand = itemView.findViewById(R.id.brandInfo);
+            productQuantity = itemView.findViewById(R.id.productQuantity);
         }
     }
 

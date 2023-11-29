@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -94,10 +95,21 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
             // Create an intent to open CartActivity
             Intent intent = new Intent(BrowseProducts.this, CartActivity.class);
 
-            // Pass the selected items and their total cost as extras
-            double totalCost = calculateTotalCost(selectedItems);
+            // Call calculateTotalCost without any parameters
+            calculateTotalCost();
 
+            // Pass the selected items as an extra to CartActivity
             intent.putStringArrayListExtra("selectedItems", selectedItems);
+
+            // You might want to calculate the total cost again here if needed
+            double totalCost = 0.0;
+            for (Product product : productList) {
+                if (product.isSelected()) {
+                    totalCost += Double.parseDouble(product.getPrice()) * product.getQuantity();
+                }
+            }
+
+            // Pass the total cost to CartActivity
             intent.putExtra("totalCost", totalCost);
 
             Log.d("BrowseProducts", "Selected items: " + selectedItems.toString());
@@ -116,21 +128,25 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            // Update the cartIndicator and other relevant information based on the result
             if (data != null) {
                 String productName = data.getStringExtra("productName");
                 String productPrice = data.getStringExtra("productPrice");
                 String productCategory = data.getStringExtra("productCategory");
+                int productQuantity = data.getIntExtra("productQuantity", 1);
 
-                // Add the selected item to the cart
-                selectedItems.add(productName + " - " + productPrice);
+                // Find the selected product in the productList and update its quantity
+                for (Product product : productList) {
+                    if (product.getName().equals(productName) && product.getPrice().equals(productPrice)) {
+                        product.setQuantity(product.getQuantity() + productQuantity);
+                    }
+                }
 
-                // Update your cartIndicatorTextView and other UI elements as needed
-                // For example:
-                updateCartIndicator();
+                // Update the UI or notify the adapter about the change
+                productAdapter.notifyDataSetChanged();
             }
         }
     }
+
 
     // Load all products from the specified collections
     private void loadAllProducts() {
@@ -209,39 +225,42 @@ public class BrowseProducts extends AppCompatActivity implements ProductAdapter.
     @Override
     public void onProductSelectionChanged() {
         updateCartIndicator();
+        calculateTotalCost();
     }
 
     public void updateCartIndicator() {
-        selectedItems.clear(); // Clear the list of selected items
-        double totalCost = 0.0;
+        // No need for cart indicator updates in this context
+        // Remove the related logic
 
-        int selectedProductCount = 0; // Track the count of selected products
+        // You may also remove the following lines if not needed
+        double totalCost = 0.0;
 
         for (Product product : productList) {
             if (product.isSelected()) {
-                selectedItems.add(product.getName() + " - " + product.getPrice());
-                totalCost += Double.parseDouble(product.getPrice());
-                selectedProductCount++;
+                totalCost += Double.parseDouble(product.getPrice()) * product.getQuantity();
             }
         }
 
-        // Update the cart indicator text with the count of selected products
-        cartIndicatorTextView.setText(getString(R.string.cart_label, selectedProductCount));
+        // Update the total cost TextView in CartActivity if needed
+        // (You need to pass the totalCost to CartActivity when starting it)
+        // Example: intent.putExtra("totalCost", totalCost);
     }
 
-    private double calculateTotalCost(ArrayList<String> selectedItems) {
+
+
+    private void calculateTotalCost() {
+        // Iterate through selected items and calculate the total cost based on quantity
         double totalCost = 0.0;
 
-        for (String selectedItem : selectedItems) {
-            // Parse the price from the selected item string and add to the total cost
-            String[] parts = selectedItem.split(" - ");
-            if (parts.length == 2) {
-                double price = Double.parseDouble(parts[1]);
-                totalCost += price;
+        for (Product product : productList) {
+
+            if (product.isSelected()) {
+                totalCost += Double.parseDouble(product.getPrice()) * product.getQuantity();
             }
         }
 
-        return totalCost;
+        // Update the total cost TextView in CartActivity
+        // (You need to pass the totalCost to CartActivity when starting it)
     }
 
     private void searchProducts() {

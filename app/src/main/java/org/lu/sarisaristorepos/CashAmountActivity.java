@@ -136,10 +136,12 @@ public class CashAmountActivity extends AppCompatActivity {
         confirmDialogButton.setOnClickListener(v -> {
             // Close the dialog
             receiptDialog.dismiss();
-            BrowseProducts();
-            finish();
-            // Show a confirmation message or perform additional actions if needed
-            Toast.makeText(CashAmountActivity.this, "Transaction confirmed!", Toast.LENGTH_SHORT).show();
+
+            // Start the BrowseProducts activity and clear the back stack
+            Intent intent = new Intent(CashAmountActivity.this, BrowseProducts.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            Toast.makeText(this, "Transaction Complete", Toast.LENGTH_SHORT).show();
+            startActivity(intent);
         });
 
         // Show the dialog
@@ -167,8 +169,4 @@ public class CashAmountActivity extends AppCompatActivity {
         return timeStamp + "_" + uuid;
     }
 
-    private void BrowseProducts(){
-        Intent intent = new Intent(this, BrowseProducts.class);
-        startActivity(intent);
-    }
 }

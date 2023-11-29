@@ -83,6 +83,7 @@
     <string name="point_of_sale">Point of Sale</string>
     <string name="manage_products">Manage Products</string>
     <string name="log_out">Quit</string>
+    <string name="search">Search</string>
 
 
 </resources>
