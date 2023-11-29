@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg5"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/Label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="monospace"
         android:padding="20dp"
-        android:text="Dashboard"
-        android:textSize="25dp"
+        android:text="@string/dashboard"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -23,11 +25,16 @@
 
     <Button
         android:id="@+id/posBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
         android:layout_marginTop="4dp"
-        android:text="Point of Sale"
-        android:textSize="25dp"
+        android:text="@string/point_of_sale"
+        android:textSize="25sp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:fontFamily="monospace"
+        android:background="@drawable/round_back_primary"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -37,10 +44,15 @@
 
     <Button
         android:id="@+id/productsBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Manage Products"
-        android:textSize="25dp"
+        android:text="@string/manage_products"
+        android:textSize="25sp"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:fontFamily="monospace"
+        android:background="@drawable/round_back_primary"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -50,11 +62,14 @@
 
     <Button
         android:id="@+id/logoutBtn"
-        android:layout_width="130dp"
-        android:layout_height="48dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Log-Out"
-        android:textSize="15dp"
+        android:text="@string/log_out"
+        android:textSize="15sp"
+        android:fontFamily="monospace"
+        android:textColor="@color/white"
+        android:background="@drawable/round_back_primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.888"
         app:layout_constraintStart_toEndOf="@+id/Label"
@@ -63,8 +78,8 @@
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/lineChart"
-        android:layout_width="378dp"
-        android:layout_height="361dp"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="30dp"
@@ -74,10 +89,11 @@
 
     <Spinner
         android:id="@+id/periodSpinner"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="16dp"
+        android:spinnerMode="dropdown"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineChart" />
 
@@ -89,6 +105,10 @@
         android:layout_marginTop="24dp"
         android:text="@string/days"
         android:textSize="25sp"
+        android:fontFamily="monospace"
+        android:background="@drawable/round_back_primary"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lineChart" />
 

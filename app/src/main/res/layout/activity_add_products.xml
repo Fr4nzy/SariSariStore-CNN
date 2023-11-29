@@ -4,16 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg5"
     tools:context=".AddProducts">
 
     <TextView
         android:id="@+id/LabelManageActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="36dp"
-        android:layout_marginTop="24dp"
         android:text="@string/add_products"
-        android:textSize="25sp"
+        android:layout_marginStart="112dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="monospace"
+        android:textSize="30sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,6 +27,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         android:ems="10"
+        android:fontFamily="monospace"
         android:hint="@string/item_name"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,6 +41,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         android:ems="10"
+        android:fontFamily="monospace"
         android:hint="@string/item_brand"
         android:inputType="text"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,6 +55,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="24dp"
         android:ems="10"
+        android:fontFamily="monospace"
         android:hint="@string/item_price"
         android:inputType="numberSigned"
         app:layout_constraintStart_toStartOf="parent"
@@ -81,10 +87,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="84dp"
         android:text="@string/select_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.256"
         app:layout_constraintStart_toEndOf="@+id/previewImg"
         app:layout_constraintTop_toBottomOf="@+id/categorySelect" />
 
@@ -93,20 +99,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/round_back_primary"
+        android:fontFamily="monospace"
         android:text="@string/camera"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.422"
         app:layout_constraintStart_toEndOf="@+id/previewImg"
-        app:layout_constraintTop_toBottomOf="@+id/categorySelect" />
+        app:layout_constraintTop_toBottomOf="@+id/btnImgSelect" />
 
     <Button
         android:id="@+id/btnInsert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="88dp"
-        android:layout_marginTop="48dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="72dp"
+        android:background="@drawable/round_back_primary"
+        android:fontFamily="monospace"
         android:text="@string/submit"
+        android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/previewImg" />
 
@@ -114,31 +126,12 @@
         android:id="@+id/classifyLbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="438dp"
-        android:layout_marginEnd="45dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="24dp"
         android:text="@string/product_name"
         android:textSize="12sp"
         android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/previewImg"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/percentLbl"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="33dp"
-        android:text="@string/_0"
-        android:textSize="20sp"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@+id/btnImgSelect"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toEndOf="@+id/previewImg"
-        app:layout_constraintTop_toBottomOf="@+id/classifyLbl"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/previewImg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
