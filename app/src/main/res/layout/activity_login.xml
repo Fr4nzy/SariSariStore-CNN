@@ -24,12 +24,12 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
-        android:layout_marginTop="152dp"
         android:layout_centerVertical="true"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="14dp"
         android:src="@mipmap/sarisaristore_launcher_icon_foreground"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:autofillHints="username"
@@ -99,20 +99,6 @@
         android:text="@string/login_btn"
         app:layout_constraintTop_toBottomOf="@+id/editPasswordTxt"
         tools:layout_editor_absoluteX="20dp" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="644dp"
-        android:text="OR"
-        android:textColor="#80000000"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/registerBtn"

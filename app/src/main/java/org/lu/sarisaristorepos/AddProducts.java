@@ -48,7 +48,7 @@ public class AddProducts extends AppCompatActivity {
     private EditText productNameEditText, productPriceEditText, productBrandEditText;
     private Spinner categorySpinner;
     private ImageView previewImageView;
-    private TextView classifyLbl, percentLbl;
+    private TextView classifyLbl;
 
 
     private FirebaseFirestore db;
@@ -69,7 +69,6 @@ public class AddProducts extends AppCompatActivity {
         categorySpinner = findViewById(R.id.categorySelect);
         previewImageView = findViewById(R.id.previewImg);
         classifyLbl = findViewById(R.id.classifyLbl);
-        percentLbl = findViewById(R.id.percentLbl);
         Button selectImageButton = findViewById(R.id.btnImgSelect);
         Button camera = findViewById(R.id.btnImgCapture);
 
