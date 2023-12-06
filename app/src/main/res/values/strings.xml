@@ -46,7 +46,7 @@
     <string name="timer">Timer</string>
     <string name="submit">Submit</string>
     <string name="log_in_lbl">Log-In</string>
-    <string name="username_et">Username</string>
+    <string name="username_et">Email</string>
     <string name="login_password_et">Password</string>
     <string name="login_btn">Login</string>
     <string name="login_to_register_btn">Register</string>
@@ -84,6 +84,9 @@
     <string name="manage_products">Manage Products</string>
     <string name="log_out">Quit</string>
     <string name="search">Search</string>
+    <string name="phone_number">ex. 09123456789</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="enter_otp_code">Enter OTP Code</string>
 
 
 </resources>

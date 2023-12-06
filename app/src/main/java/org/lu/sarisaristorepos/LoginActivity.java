@@ -1,5 +1,5 @@
 package org.lu.sarisaristorepos;
-import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -7,13 +7,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
     EditText editUserTextName, getEditUserTextPassword;
-    Button btnLogin, btnRegister;
+    Button btnLogin, btnRegister, btnPhone;
     TextView forgotPasswordBtn;
 
     @Override
@@ -27,10 +30,13 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.loginBtn);
         btnRegister = findViewById(R.id.registerBtn);
         forgotPasswordBtn = findViewById(R.id.forgotPasswordBtn);
+        btnPhone = findViewById(R.id.phoneBtn);
 
         btnLogin.setOnClickListener(v -> Login());
 
         btnRegister.setOnClickListener(v -> Register());
+
+        btnPhone.setOnClickListener(view -> Phone());
 
         forgotPasswordBtn.setOnClickListener(v -> {ForgotPassword(); });
 
@@ -69,6 +75,11 @@ public class LoginActivity extends AppCompatActivity {
     //Forgot Password Activity
     public void ForgotPassword() {
         Intent intent = new Intent(LoginActivity.this, ForgotPassword.class);
+        startActivity(intent);
+    }
+
+    public void Phone(){
+        Intent intent = new Intent(LoginActivity.this, LoginPhoneNumber.class);
         startActivity(intent);
     }
 

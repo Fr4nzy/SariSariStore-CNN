@@ -27,6 +27,7 @@
 
     <TextView
         android:id="@+id/textView3"
+        android:textColor="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="248dp"
@@ -39,6 +40,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
+        android:textColorHint="@color/black"
         android:textColor="@color/black"
         android:id="@+id/editRegEmail"
         android:layout_width="match_parent"
@@ -58,6 +60,8 @@
         app:layout_constraintVertical_bias="0.215" />
 
     <EditText
+        android:textColorHint="@color/black"
+        android:textColor="@color/black"
         android:id="@+id/editRegPassword"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -77,6 +81,7 @@
 
     <EditText
         android:textColor="@color/black"
+        android:textColorHint="@color/black"
         android:id="@+id/editRegCnfrmPword"
         android:layout_width="match_parent"
         android:layout_height="48dp"

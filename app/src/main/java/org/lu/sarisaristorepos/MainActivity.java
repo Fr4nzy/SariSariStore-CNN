@@ -188,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void displayLineChart(ArrayList<Entry> entries) {
-        LineDataSet dataSet = new LineDataSet(entries, "SMA Data");
+        LineDataSet dataSet = new LineDataSet(entries, "");
 
         // Set chart content offsets to increase padding
         lineChart.setViewPortOffsets(80f, 100f, 80f, 100f);
@@ -218,14 +218,15 @@ public class MainActivity extends AppCompatActivity {
         lineChart.setDescription(description);
 
         // Set chart background color to black
-        lineChart.setBackgroundColor(Color.BLACK);
+        lineChart.setBackgroundColor(Color.DKGRAY);
 
         // Customize XAxis (bottom axis) text color and label
         lineChart.getXAxis().setTextColor(Color.WHITE);
         lineChart.getXAxis().setValueFormatter(new DateValueFormatter()); // Use a custom DateValueFormatter for formatting dates
+        lineChart.getXAxis().setGranularity(250f);
 
         // Adjust the spacing of X-axis labels
-        lineChart.getXAxis().setLabelCount(entries.size(), false); // Set the label count to the number of entries
+        lineChart.getXAxis().setLabelCount(15, true); // Set the label count to the number of entries
         lineChart.getXAxis().setGranularity(1f); // Set the minimum interval between axis values to 1
 
         // Rotate X-axis labels for better readability
@@ -234,6 +235,8 @@ public class MainActivity extends AppCompatActivity {
 
         // Customize YAxis (left axis) text color, position, and grid granularity
         YAxis leftYAxis = lineChart.getAxisLeft();
+        YAxis rightYAxis = lineChart.getAxisRight();
+        rightYAxis.setEnabled(false);
         leftYAxis.setTextColor(Color.WHITE);
         leftYAxis.setYOffset(15f); // Adjust the offset as needed
         leftYAxis.setGranularity(500f); // Set the granularity to control the spacing of grid lines

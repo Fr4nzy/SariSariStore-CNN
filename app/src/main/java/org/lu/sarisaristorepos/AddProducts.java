@@ -18,8 +18,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -41,7 +39,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 
 public class AddProducts extends AppCompatActivity {
@@ -91,7 +88,8 @@ public class AddProducts extends AppCompatActivity {
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(cameraIntent,3);
                 }else {
-                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, 6);
+                    Toast.makeText(this, "Retrying Request Permission to use Camera", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -103,14 +101,6 @@ public class AddProducts extends AppCompatActivity {
         });
 
 
-        // Initialize the image picker launcher
-        ActivityResultLauncher<Intent> imagePickerLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
-                result -> {
-                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                        selectedImageUri = result.getData().getData();
-                        displaySelectedImage();
-                    }
-                });
 
         submitButton.setOnClickListener(v -> {
             String productName = productNameEditText.getText().toString();
@@ -159,14 +149,24 @@ public class AddProducts extends AppCompatActivity {
                                                 productPriceEditText.setText("");
                                                 productBrandEditText.setText("");
                                                 previewImageView.setImageResource(R.drawable.baseline_image_24); // Reset image view
+                                                Toast.makeText(this, "Data inserted successfully", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 // Handle the error
-                                                Toast.makeText(this, "Fail Insertion", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(this, "Fail Insertion: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                Log.e("FirestoreError", "Firestore insertion failed", task.getException());
                                             }
                                         });
 
+                            }).addOnFailureListener(e -> {
+                                // Handle the failure to get download URL
+                                Toast.makeText(this, "Error getting download URL", Toast.LENGTH_SHORT).show();
+                                Log.e("FirebaseStorageError", "Error getting download URL", e);
                             });
 
+                        }).addOnFailureListener(e -> {
+                            // Handle the failure of image upload
+                            Toast.makeText(this, "Error uploading image", Toast.LENGTH_SHORT).show();
+                            Log.e("FirebaseStorageError", "Error uploading image", e);
                         });
                     } else {
                         // Notify the user that an image must be selected
@@ -178,6 +178,8 @@ public class AddProducts extends AppCompatActivity {
                 Toast.makeText(this, "Fields can't be empty", Toast.LENGTH_SHORT).show();
             }
         });
+
+
 
 
     }
@@ -249,62 +251,65 @@ public class AddProducts extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == 3) { // Handles the image being taken by the camera
-                Bitmap image = null;
-                if (data != null && data.getExtras() != null) {
-                    image = (Bitmap) data.getExtras().get("data");
-                }
-                if (image != null) {
-                    int dimension = Math.min(image.getWidth(), image.getHeight());
-                    image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
-                    previewImageView.setImageBitmap(image);
-
-                    try {
-                        image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-                        classifyImage(image); // This proceeds to resize it
-                    } catch (Exception e) {
-                        Log.e("ImageProcessingError", "Error processing the image: " + e.getMessage());
-                        Toast.makeText(this, "Error processing the image. Please try again.", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            } else {
-                Uri dat = Objects.requireNonNull(data).getData();
-                if (dat != null) {
-                    Bitmap image;
-                    try {
-                        image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), dat);
-                        previewImageView.setImageBitmap(image); // This handles the image in the gallery
-
-                        try {
-                            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-                            classifyImage(image); // Then resize it
-                        } catch (Exception e) {
-                            Log.e("ImageProcessingError", "Error processing the image: " + e.getMessage());
-                            Toast.makeText(this, "Error processing the image. Please try again.", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (IOException e) {
-                        Log.e("ImageRetrievalError", "Error retrieving the image: " + e.getMessage());
-                        Toast.makeText(this, "Error retrieving the image. Please try again.", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-                }else {
-                    // Handle the case when the 'data' extra is null or the image is not provided
-                    Toast.makeText(this, "Loading Image Failed", Toast.LENGTH_SHORT).show();
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == 3) { // Camera
+                Bitmap image = (Bitmap) data.getExtras().get("data");
+                processSelectedImage(image);
+            } else if (requestCode == 1) { // Gallery
+                selectedImageUri = data.getData();
+                try {
+                    Bitmap image = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+                    processSelectedImage(image);
+                } catch (IOException e) {
+                    Log.e("ImageRetrievalError", "Error retrieving the image: " + e.getMessage());
+                    Toast.makeText(this, "Error retrieving the image. Please try again.", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
                 }
             }
+
+        } else {
+            // Handle other cases or errors
+            Toast.makeText(this, "Error in image selection. Please try again.", Toast.LENGTH_SHORT).show();
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
+
+    // Helper method to process the selected image
+    private void processSelectedImage(Bitmap image) {
+        if (image != null) {
+            int dimension = Math.min(image.getWidth(), image.getHeight());
+            image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
+            previewImageView.setImageBitmap(image);
+
+            try {
+                image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
+                classifyImage(image);
+            } catch (Exception e) {
+                Log.e("ImageProcessingError", "Error processing the image: " + e.getMessage());
+                Toast.makeText(this, "Error processing the image. Please try again.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Error retrieving the image. Please try again.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+
 
 
     // Helper method to display the selected image
     private void displaySelectedImage() {
-        Glide.with(this)
-                .load(selectedImageUri)
-                .apply(new RequestOptions().centerCrop())
-                .into(previewImageView);
+        if (selectedImageUri != null) {
+            Glide.with(this)
+                    .load(selectedImageUri)
+                    .apply(new RequestOptions().centerCrop())
+                    .into(previewImageView);
+        } else {
+            Toast.makeText(this, "Error displaying the selected image. Please try again.", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
 
 }

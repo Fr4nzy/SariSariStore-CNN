@@ -39,4 +39,7 @@
     <string name="point_of_sale">Point of Sale</string>
     <string name="manage_products">Manage Products</string>
     <string name="log_out">Quit</string>
+    <string name="phone_number">ex. 09123456789</string>
+    <string name="send_otp">Send OTP</string>
+    <string name="enter_otp_code">Enter OTP Code</string>
 </resources>

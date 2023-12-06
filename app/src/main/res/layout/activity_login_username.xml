@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginUsernameActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="112dp"
+        android:layout_height="115dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="132dp"
+        android:src="@drawable/person"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/login_username"
+        android:layout_width="295dp"
+        android:layout_height="56dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="56dp"
+        android:autofillHints="Phone Number"
+        android:ems="10"
+        android:fontFamily="monospace"
+        android:hint="@string/username_et"
+        android:inputType="phone"
+        android:maxLines="1"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/phonelbl" />
+
+    <Button
+        android:id="@+id/login_let_me_in"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/round_back_primary"
+        android:fontFamily="monospace"
+        android:text="@string/submit"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/login_username"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <TextView
+        android:id="@+id/phonelbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="52dp"
+        android:text="Enter your username"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <ProgressBar
+        android:id="@+id/login_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="60dp"
+        android:layout_height="59dp"
+        android:layout_marginStart="180dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="183dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_let_me_in"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

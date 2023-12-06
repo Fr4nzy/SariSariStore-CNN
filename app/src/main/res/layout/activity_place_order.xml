@@ -106,6 +106,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="162dp"
         android:text="Purchase"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.388"
         app:layout_constraintStart_toStartOf="parent"

@@ -34,6 +34,7 @@
 
     <EditText
         android:textColor="@color/black"
+        android:textColorHint="@color/black"
         android:autofillHints="username"
         android:id="@+id/editUsertxt"
         android:layout_width="match_parent"
@@ -70,6 +71,7 @@
     <EditText
         android:textColor="@color/black"
         android:autofillHints="password"
+        android:textColorHint="@color/black"
         android:id="@+id/editPasswordTxt"
         android:layout_width="match_parent"
         android:layout_height="58dp"
@@ -93,29 +95,38 @@
         android:id="@+id/loginBtn"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginTop="104dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="60dp"
         android:background="@drawable/round_back_primary"
         android:fontFamily="monospace"
-        android:textColor="@color/black"
         android:text="@string/login_btn"
+        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/editPasswordTxt"
-        tools:layout_editor_absoluteX="20dp" />
+        tools:layout_editor_absoluteX="16dp" />
+
+    <Button
+        android:id="@+id/phoneBtn"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/round_back_primary"
+        android:fontFamily="monospace"
+        android:text="Phone"
+        android:textColor="@color/black"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/registerBtn"
+        tools:layout_editor_absoluteX="16dp" />
 
     <Button
         android:id="@+id/registerBtn"
         android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="28dp"
         android:background="@drawable/round_back_primary"
         android:fontFamily="monospace"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:textColor="@color/black"
         android:text="@string/login_to_register_btn"
+        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/loginBtn"
-        tools:layout_editor_absoluteX="20dp" />
+        tools:layout_editor_absoluteX="16dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,5 +7,5 @@
         <!-- Add this line to enforce "Not-Night Mode" -->
     </style>
 
-    <style name="Theme.SariSariStorePOS" parent="Base.Theme.SariSariStorePOS" />
+    <style name="Theme.Design.Light." parent="Base.Theme.SariSariStorePOS" />
 </resources>

@@ -22,6 +22,7 @@
 
     <EditText
         android:textColor="@color/black"
+        android:textColorHint="@color/black"
         android:id="@+id/productName"
         android:layout_width="240dp"
         android:layout_height="56dp"
@@ -37,6 +38,7 @@
 
     <EditText
         android:textColor="@color/black"
+        android:textColorHint="@color/black"
         android:id="@+id/productBrand"
         android:layout_width="240dp"
         android:layout_height="56dp"
@@ -52,6 +54,7 @@
 
     <EditText
         android:textColor="@color/black"
+        android:textColorHint="@color/black"
         android:id="@+id/productPrice"
         android:layout_width="240dp"
         android:layout_height="56dp"
@@ -66,6 +69,7 @@
         android:autofillHints="Item Price" />
 
     <Spinner
+        android:textColorHint="@color/black"
         android:textColor="@color/black"
         android:id="@+id/categorySelect"
         android:layout_width="240dp"
@@ -131,6 +135,7 @@
 
     <TextView
         android:id="@+id/classifyLbl"
+        android:textColorHint="@color/black"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="68dp"
